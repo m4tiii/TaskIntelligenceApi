@@ -1,10 +1,10 @@
 package pl.mati.taskintelligenceapi.exception;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -24,15 +24,20 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleErrorValidationException(DataIntegrityViolationException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Data are not valid title(max 100 characters), description(max 255 characters)",
-                LocalDateTime.now()
-        );
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleErrorValidationException(MethodArgumentNotValidException ex) {
+       String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+               .map(er -> er.getDefaultMessage())
+               .findFirst()
+               .orElse("Validation error occurred");
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+       ErrorResponse errorResponse = new ErrorResponse(
+               HttpStatus.BAD_REQUEST.value(),
+               errorMessage,
+               LocalDateTime.now()
+       );
+
+       return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
