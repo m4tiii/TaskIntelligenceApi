@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Task Intelligence Api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/task_intelligence_db
+    username: postgres
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # W środowisku produkcyjnym zaleca się zmianę na 'validate' i użycie narzędzia migracji jak Flyway
+    show-sql: true
