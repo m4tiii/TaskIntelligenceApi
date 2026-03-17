@@ -30,4 +30,8 @@ public class Task {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
