@@ -1,4 +1,8 @@
 spring:
+  security:
+    user:
+      name: user
+      password: pass
   application:
     name: Task Intelligence Api
 

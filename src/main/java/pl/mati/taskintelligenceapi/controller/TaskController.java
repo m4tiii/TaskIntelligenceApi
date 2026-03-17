@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.mati.taskintelligenceapi.dto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.TaskResponseDTO;
-import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.service.TaskService;
 
 import java.net.URI;
@@ -21,7 +20,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/{requestedId}")
-    public ResponseEntity<TaskResponseDTO> getTaskByIdFromDB(@PathVariable Long requestedId){
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long requestedId){
         return ResponseEntity.ok(taskService.getTaskById(requestedId));
     }
 
@@ -40,7 +39,7 @@ public class TaskController {
                 .buildAndExpand(savedTask.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(taskService.getTaskById(savedTask.id()));
+        return ResponseEntity.created(location).body(savedTask);
     }
 
     @PutMapping("/{requestedId}")
