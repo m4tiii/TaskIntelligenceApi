@@ -14,5 +14,5 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update # W środowisku produkcyjnym zaleca się zmianę na 'validate' i użycie narzędzia migracji jak Flyway
+      ddl-auto: update
     show-sql: true
