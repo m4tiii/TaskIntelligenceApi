@@ -10,6 +10,7 @@ import pl.mati.taskintelligenceapi.dto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.service.TaskService;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,18 +21,20 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/{requestedId}")
-    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long requestedId){
-        return ResponseEntity.ok(taskService.getTaskById(requestedId));
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long requestedId, Principal principal) {
+        return ResponseEntity.ok(taskService.getTaskById(requestedId, principal.getName()));
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponseDTO>> getAllTasks(){
-        return ResponseEntity.ok(taskService.getAllTasks());
+    public ResponseEntity<List<TaskResponseDTO>> getAllTasks(Principal principal){
+        return ResponseEntity.ok(taskService.getAllTasks(principal.getName()));
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> saveTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO){
-        TaskResponseDTO savedTask = taskService.createTask(taskRequestDTO);
+    public ResponseEntity<TaskResponseDTO> saveTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO,
+                                                    Principal principal
+    ) {
+        TaskResponseDTO savedTask = taskService.createTask(taskRequestDTO, principal.getName());
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -43,13 +46,16 @@ public class TaskController {
     }
 
     @PutMapping("/{requestedId}")
-    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long requestedId, @Valid @RequestBody TaskRequestDTO taskRequestDTO){
-        return ResponseEntity.ok(taskService.updateTask(requestedId, taskRequestDTO));
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long requestedId,
+                                                      @Valid @RequestBody TaskRequestDTO taskRequestDTO,
+                                                      Principal principal
+    ){
+        return ResponseEntity.ok(taskService.updateTask(requestedId, taskRequestDTO, principal.getName()));
     }
 
     @DeleteMapping("/{requestedId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long requestedId){
-        taskService.deleteTask(requestedId);
+    public ResponseEntity<Void> deleteTask(@PathVariable Long requestedId, Principal principal){
+        taskService.deleteTask(requestedId, principal.getName());
         return ResponseEntity.noContent().build();
     }
 }
