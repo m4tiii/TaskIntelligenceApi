@@ -44,6 +44,5 @@ public class Task {
     @Enumerated
     private TaskStatus taskStatus;
 
-    @Transient
     private double priorityScore;
 }
