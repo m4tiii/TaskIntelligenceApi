@@ -27,7 +27,7 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(Principal principal){
-        return ResponseEntity.ok(taskService.getAllTasks(principal.getName()));
+        return ResponseEntity.ok(taskService.getAllTasksByUserUsername(principal.getName()));
     }
 
     @PostMapping

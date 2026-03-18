@@ -20,7 +20,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    public List<TaskResponseDTO> getAllTasks(String username){
+    public List<TaskResponseDTO> getAllTasksByUserUsername(String username){
         List<Task> tasks = taskRepository.findAllByUserUsername(username);
         return tasks.stream()
                 .map(this::mapToDto)
