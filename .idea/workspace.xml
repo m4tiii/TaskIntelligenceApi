@@ -29,7 +29,7 @@
         <entry key="$PROJECT_DIR$" value="bc57b11eebc674ba99fff6dda5d1f6ca3f1c5501" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/backend" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {}
@@ -97,6 +97,7 @@
     "git-widget-placeholder": "master",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/StudyProjects/Task Intelligence Api",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -251,6 +252,7 @@
       <workItem from="1773784387113" duration="464000" />
       <workItem from="1773784866508" duration="19113000" />
       <workItem from="1773858229756" duration="404000" />
+      <workItem from="1773859970742" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="feat: Create TaskRepository and connection to database">
       <option name="closed" value="true" />
