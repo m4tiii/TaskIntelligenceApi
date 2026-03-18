@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record TaskRequestDTO(
         @NotBlank(message = "Title is required")
@@ -15,8 +15,8 @@ public record TaskRequestDTO(
         String title,
         @Size(max = 255, message = "Description cannot be longer than 255 characters")
         String description,
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        LocalDate deadline,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        LocalDateTime deadline,
         @Max(10) @Min(1)
         int importance,
         TaskStatus status

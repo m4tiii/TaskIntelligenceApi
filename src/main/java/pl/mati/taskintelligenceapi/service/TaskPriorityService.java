@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -12,7 +12,7 @@ public class TaskPriorityService {
     public double calculatePriority(Task task){
         if(task.getTaskStatus() == TaskStatus.COMPLETED) return 0;
 
-        long daysToDeadLine = ChronoUnit.DAYS.between(LocalDate.now(), task.getDeadlineTo());
+        long daysToDeadLine = ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadlineTo())/24;
 
         long factor = Math.max(1, daysToDeadLine);
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
@@ -29,10 +29,10 @@ public class Task {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column
-    private LocalDate deadlineTo;
+    private LocalDateTime deadlineTo;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

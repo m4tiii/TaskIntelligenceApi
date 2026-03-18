@@ -2,14 +2,14 @@ package pl.mati.taskintelligenceapi.dto;
 
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record TaskResponseDTO(
         Long id,
         String title,
         String description,
-        LocalDate createdAt,
-        LocalDate deadline,
+        LocalDateTime createdAt,
+        LocalDateTime deadline,
         int importance,
         TaskStatus status,
         double taskPriority

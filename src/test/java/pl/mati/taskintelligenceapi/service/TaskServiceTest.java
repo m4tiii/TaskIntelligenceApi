@@ -18,7 +18,7 @@ import pl.mati.taskintelligenceapi.mapper.TaskMapper;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.util.Optional;
@@ -79,7 +79,7 @@ public class TaskServiceTest {
         existingTask.setTitle("titleTest");
         existingTask.setDescription("descriptionTest");
 
-        TaskRequestDTO updateRequest = new TaskRequestDTO("updatedTitle", "updatedDescription", LocalDate.of(2026, Month.MARCH, 31), 5, TaskStatus.NEW);
+        TaskRequestDTO updateRequest = new TaskRequestDTO("updatedTitle", "updatedDescription", LocalDateTime.of(2026, Month.MARCH, 31, 12,15), 5, TaskStatus.NEW);
         Mockito.when(taskRepository.findByIdAndUserUsername(taskId, username)).thenReturn(Optional.of(existingTask));
 
         //When
@@ -127,14 +127,14 @@ public class TaskServiceTest {
         task1.setId(taskIdFirst);
         task1.setTitle("titleTest1");
         task1.setImportance(10);
-        task1.setCreatedAt(LocalDate.now());
-        task1.setDeadlineTo(LocalDate.of(2026, Month.MARCH, 31));
+        task1.setCreatedAt(LocalDateTime.now());
+        task1.setDeadlineTo(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
         Task task2 = new Task();
         task2.setId(taskIdSecond);
         task2.setTitle("titleTest2");
-        task2.setCreatedAt(LocalDate.now());
+        task2.setCreatedAt(LocalDateTime.now());
         task2.setImportance(5);
-        task2.setDeadlineTo(LocalDate.of(2026, Month.MARCH, 31));
+        task2.setDeadlineTo(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
 
         Mockito.when(taskRepository.findAllByUserUsername(username)).thenReturn(List.of(task1, task2));
         Mockito.when(taskPriorityService.calculatePriority(task1)).thenReturn(100.0);
@@ -192,7 +192,7 @@ public class TaskServiceTest {
         String username = "userTest";
         Long taskId = 200L;
 
-        TaskRequestDTO updateRequest = new TaskRequestDTO("someTitle", "someDescription", LocalDate.of(2026, Month.MARCH, 31), 10, TaskStatus.NEW);
+        TaskRequestDTO updateRequest = new TaskRequestDTO("someTitle", "someDescription", LocalDateTime.of(2026, Month.MARCH, 31, 12,15), 10, TaskStatus.NEW);
 
         Mockito.when(taskRepository.findByIdAndUserUsername(taskId, username)).thenReturn(Optional.empty());
 
@@ -229,7 +229,7 @@ public class TaskServiceTest {
         savedTask.setDescription("testDescription");
         savedTask.setUser(testUser);
 
-        TaskRequestDTO taskRequestDTO = new TaskRequestDTO("testTitle", "testDescription", LocalDate.of(2026, Month.MARCH, 31), 5, TaskStatus.NEW);
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO("testTitle", "testDescription", LocalDateTime.of(2026, Month.MARCH, 31, 12,15), 5, TaskStatus.NEW);
         Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(savedTask);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(testUser));
         //When
@@ -252,7 +252,7 @@ public class TaskServiceTest {
         savedTask.setTitle("testTitle");
         savedTask.setDescription("testDescription");
 
-        TaskRequestDTO taskRequestDTO = new TaskRequestDTO("testTitle", "testDescription", LocalDate.of(2026, Month.MARCH, 31), 5, TaskStatus.NEW);
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO("testTitle", "testDescription", LocalDateTime.of(2026, Month.MARCH, 31, 12,15), 5, TaskStatus.NEW);
 
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
