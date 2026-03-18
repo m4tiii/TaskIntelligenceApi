@@ -1,6 +1,8 @@
 package pl.mati.taskintelligenceapi.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +27,23 @@ public class Task {
 
     private String description;
 
-    private Boolean completed;
-
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @Column
+    private LocalDateTime deadlineTo;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Min(1) @Max(10)
+    private int importance;
+
+    @Enumerated
+    private TaskStatus taskStatus;
+
+    @Transient
+    private double priorityScore;
 }
