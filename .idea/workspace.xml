@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="88e58aa2-7830-4afe-b52b-06aa02bc0466" name="Changes" comment="refactor:&#10;- Changed LocalDate to LocalDateTime" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="47" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Record" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="bc57b11eebc674ba99fff6dda5d1f6ca3f1c5501" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/backend" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/m4tiii/TaskIntelligenceApi.git&quot;,
+    &quot;accountId&quot;: &quot;ce5ba6d3-a1eb-4cbd-a952-8c1bd1495ae9&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/README.md" root0="FORCE_HIGHLIGHTING" root1="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="3B3IFG02lIp6PTy9hornE4TieZG" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.TaskServiceTest.executor": "Run",
+    "JUnit.TaskServiceTest.shouldDeleteTaskSuccessfully.executor": "Run",
+    "JUnit.TaskServiceTest.shouldReturnEmptyListWhenNoTasksFound.executor": "Run",
+    "JUnit.TaskServiceTest.shouldReturnListOfTasks.executor": "Run",
+    "JUnit.TaskServiceTest.shouldReturnListOfTasksSortedByPriority.executor": "Run",
+    "JUnit.TaskServiceTest.shouldReturnTaskWhenFound.executor": "Run",
+    "JUnit.TaskServiceTest.shouldThrowExceptionWhenCreatingTaskForNonExistingUser.executor": "Run",
+    "JUnit.TaskServiceTest.shouldThrowExceptionWhenDeletingNonExistingTask.executor": "Run",
+    "JUnit.TaskServiceTest.shouldThrowExceptionWhenTaskNotFound.executor": "Run",
+    "JUnit.TaskServiceTest.shouldThrowExceptionWhenUpdatingNonExistingTask.executor": "Run",
+    "JUnit.TaskServiceTest.shouldUpdateTaskWhenFound.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.TaskIntelligenceApiApplication.executor": "Run",
+    "com.google.cloudcode.ide_session_index": "20260317_0000",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "master",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\StudyProjects\Task Intelligence Api\src\main\java\pl\mati\taskintelligenceapi\domain" />
+      <recent name="C:\StudyProjects\Task Intelligence Api\src\main\java\pl\mati\taskintelligenceapi\api" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.TaskServiceTest">
+    <configuration name="TaskServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TaskIntelligenceApi" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.mati.taskintelligenceapi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pl.mati.taskintelligenceapi.service" />
+      <option name="MAIN_CLASS_NAME" value="pl.mati.taskintelligenceapi.service.TaskServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TaskServiceTest.shouldReturnListOfTasksSortedByPriority" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TaskIntelligenceApi" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.mati.taskintelligenceapi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pl.mati.taskintelligenceapi.service" />
+      <option name="MAIN_CLASS_NAME" value="pl.mati.taskintelligenceapi.service.TaskServiceTest" />
+      <option name="METHOD_NAME" value="shouldReturnListOfTasksSortedByPriority" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TaskServiceTest.shouldReturnTaskWhenFound" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TaskIntelligenceApi" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.mati.taskintelligenceapi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pl.mati.taskintelligenceapi.service" />
+      <option name="MAIN_CLASS_NAME" value="pl.mati.taskintelligenceapi.service.TaskServiceTest" />
+      <option name="METHOD_NAME" value="shouldReturnTaskWhenFound" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TaskServiceTest.shouldThrowExceptionWhenCreatingTaskForNonExistingUser" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TaskIntelligenceApi" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.mati.taskintelligenceapi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pl.mati.taskintelligenceapi.service" />
+      <option name="MAIN_CLASS_NAME" value="pl.mati.taskintelligenceapi.service.TaskServiceTest" />
+      <option name="METHOD_NAME" value="shouldThrowExceptionWhenCreatingTaskForNonExistingUser" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TaskServiceTest.shouldThrowExceptionWhenUpdatingNonExistingTask" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TaskIntelligenceApi" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.mati.taskintelligenceapi.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pl.mati.taskintelligenceapi.service" />
+      <option name="MAIN_CLASS_NAME" value="pl.mati.taskintelligenceapi.service.TaskServiceTest" />
+      <option name="METHOD_NAME" value="shouldThrowExceptionWhenUpdatingNonExistingTask" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Task Intelligence Api" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Task Intelligence Api" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TaskIntelligenceApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="TaskIntelligenceApi" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="pl.mati.taskintelligenceapi.TaskIntelligenceApiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TaskServiceTest" />
+        <item itemvalue="JUnit.TaskServiceTest.shouldReturnTaskWhenFound" />
+        <item itemvalue="JUnit.TaskServiceTest.shouldThrowExceptionWhenUpdatingNonExistingTask" />
+        <item itemvalue="JUnit.TaskServiceTest.shouldReturnListOfTasksSortedByPriority" />
+        <item itemvalue="JUnit.TaskServiceTest.shouldThrowExceptionWhenCreatingTaskForNonExistingUser" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="88e58aa2-7830-4afe-b52b-06aa02bc0466" name="Changes" comment="" />
+      <created>1773711224179</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1773711224179</updated>
+      <workItem from="1773711225493" duration="1477000" />
+      <workItem from="1773712716089" duration="19520000" />
+      <workItem from="1773762980363" duration="2521000" />
+      <workItem from="1773784301588" duration="76000" />
+      <workItem from="1773784387113" duration="464000" />
+      <workItem from="1773784866508" duration="19113000" />
+      <workItem from="1773858229756" duration="404000" />
+    </task>
+    <task id="LOCAL-00001" summary="feat: Create TaskRepository and connection to database">
+      <option name="closed" value="true" />
+      <created>1773714888823</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1773714888823</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: Create TaskRepository and connection to database">
+      <option name="closed" value="true" />
+      <created>1773714913812</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1773714913812</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: Create dto records&#10;refactor: JpaRepository instead of CrudRepository">
+      <option name="closed" value="true" />
+      <created>1773715896664</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1773715896664</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat: Create TaskService">
+      <option name="closed" value="true" />
+      <created>1773717765291</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1773717765291</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat: Create TaskController">
+      <option name="closed" value="true" />
+      <created>1773723122260</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1773723122260</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat: Create error handling class GlobalExceptionHandler and boilerplate ErrorResponse record">
+      <option name="closed" value="true" />
+      <created>1773723273479</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1773723273479</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix: Fixes on exception handling">
+      <option name="closed" value="true" />
+      <created>1773724314480</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773724314480</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix: Fixes on validation, changed postion of @Size to catch exception before not validated data goes to service layer&#10;&#10;refactor: typo refactors in controller">
+      <option name="closed" value="true" />
+      <created>1773724497932</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1773724497932</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feat: setup User entity and repository for Spring Security&#10;&#10;- Create User entity and UserRepository&#10;- Add Role enum with ROLE_ADMIN and ROLE_USER&#10;- Add OneToMany relationship between User and Task">
+      <option name="closed" value="true" />
+      <created>1773758570487</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1773758570487</updated>
+    </task>
+    <task id="LOCAL-00010" summary="feat: Create security for logging and registering">
+      <option name="closed" value="true" />
+      <created>1773786287841</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1773786287841</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix: &#10;- Change custom error message to print an actual error&#10;feat:&#10;- Change of TaskController and TaskService, user can check change add tasks that belong to him">
+      <option name="closed" value="true" />
+      <created>1773788382763</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773788382763</updated>
+    </task>
+    <task id="LOCAL-00012" summary="test:&#10;- Done some tests of TaskService">
+      <option name="closed" value="true" />
+      <created>1773847222928</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1773847222928</updated>
+    </task>
+    <task id="LOCAL-00013" summary="feat: implement smart task sorting and priority calculation&#10;&#10;- Add TaskStatus enum and new fields (deadline, importance, status) to Task entity and DTOs.&#10;- Create TaskPriorityService with logic to dynamically calculate task priority score.&#10;- Introduce TaskMapper component to handle Entity-DTO conversions.&#10;- Add '/api/tasks/smartTasks' endpoint to retrieve tasks sorted by priority.&#10;- Update TaskService to use the new mapper and priority calculation.&#10;- Refactor TaskServiceTest to include TaskMapper (@Spy) and TaskPriorityService (@Mock).&#10;- Add unit tests for smart task list sorting.">
+      <option name="closed" value="true" />
+      <created>1773850833658</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1773850833658</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix:&#10;-Change LocalDateTime to LocalDate">
+      <option name="closed" value="true" />
+      <created>1773851653455</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773851653456</updated>
+    </task>
+    <task id="LOCAL-00015" summary="feat:&#10;- Added Scheduler for priority of task, reload every hour">
+      <option name="closed" value="true" />
+      <created>1773852582680</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1773852582680</updated>
+    </task>
+    <task id="LOCAL-00016" summary="refactor:&#10;- Changed LocalDate to LocalDateTime">
+      <option name="closed" value="true" />
+      <created>1773858148544</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1773858148544</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: Create TaskRepository and connection to database" />
+    <MESSAGE value="feat: Create dto records&#10;refactor: JpaRepository instead of CrudRepository" />
+    <MESSAGE value="feat: Create TaskService" />
+    <MESSAGE value="feat: Create TaskController" />
+    <MESSAGE value="feat: Create error handling class GlobalExceptionHandler and boilerplate ErrorResponse record" />
+    <MESSAGE value="fix: Fixes on exception handling" />
+    <MESSAGE value="fix: Fixes on validation, changed postion of @Size to catch exception before not validated data goes to service layer&#10;&#10;refactor: typo refactors in controller" />
+    <MESSAGE value="feat: setup User entity and repository for Spring Security&#10;&#10;- Create User entity and UserRepository&#10;- Add Role enum with ROLE_ADMIN and ROLE_USER&#10;- Add OneToMany relationship between User and Task" />
+    <MESSAGE value="feat: Create security for logging and registering" />
+    <MESSAGE value="fix: &#10;- Change custom error message to print an actual error&#10;feat:&#10;- Change of TaskController and TaskService, user can check change add tasks that belong to him" />
+    <MESSAGE value="test:&#10;- Done some tests of TaskService" />
+    <MESSAGE value="feat: implement smart task sorting and priority calculation&#10;&#10;- Add TaskStatus enum and new fields (deadline, importance, status) to Task entity and DTOs.&#10;- Create TaskPriorityService with logic to dynamically calculate task priority score.&#10;- Introduce TaskMapper component to handle Entity-DTO conversions.&#10;- Add '/api/tasks/smartTasks' endpoint to retrieve tasks sorted by priority.&#10;- Update TaskService to use the new mapper and priority calculation.&#10;- Refactor TaskServiceTest to include TaskMapper (@Spy) and TaskPriorityService (@Mock).&#10;- Add unit tests for smart task list sorting." />
+    <MESSAGE value="fix:&#10;-Change LocalDateTime to LocalDate" />
+    <MESSAGE value="feat:&#10;- Added Scheduler for priority of task, reload every hour" />
+    <MESSAGE value="refactor:&#10;- Changed LocalDate to LocalDateTime" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor:&#10;- Changed LocalDate to LocalDateTime" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
