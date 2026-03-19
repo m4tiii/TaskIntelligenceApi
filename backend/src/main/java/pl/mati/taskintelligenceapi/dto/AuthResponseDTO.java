@@ -1,6 +1,7 @@
 package pl.mati.taskintelligenceapi.dto;
 
 public record AuthResponseDTO(
-        String token
+        String accessToken,
+        String refreshToken
 ) {
 }

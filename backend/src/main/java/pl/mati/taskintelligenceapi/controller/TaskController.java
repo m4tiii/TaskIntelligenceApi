@@ -37,11 +37,6 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getPageOfTasks(pageable, principal.getName()));
     }
 
-    @GetMapping("/smartTasks")
-    public ResponseEntity<List<TaskResponseDTO>> getAllSmartTasks(Principal principal){
-        return ResponseEntity.ok(taskService.getSmartTaskList(principal.getName()));
-    }
-
     @PostMapping
     public ResponseEntity<TaskResponseDTO> saveTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO,
                                                     Principal principal

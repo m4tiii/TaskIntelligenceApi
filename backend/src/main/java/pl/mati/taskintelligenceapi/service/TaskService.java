@@ -15,9 +15,7 @@ import pl.mati.taskintelligenceapi.mapper.TaskMapper;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -35,14 +33,6 @@ public class TaskService {
                 .toList();
     }
 
-    public List<TaskResponseDTO> getSmartTaskList(String username){
-        return taskRepository.findAllByUserUsername(username).stream()
-                .filter(t -> t.getTaskStatus() != TaskStatus.COMPLETED)
-                .peek(t -> t.setPriorityScore(taskPriorityService.calculatePriority(t)))
-                .sorted(Comparator.comparingDouble(Task::getPriorityScore).reversed())
-                .map(taskMapper::mapToDto)
-                .collect(Collectors.toList());
-    }
 
     public TaskResponseDTO getTaskById(Long id, String username){
         Task task = taskRepository.findByIdAndUserUsername(id, username)

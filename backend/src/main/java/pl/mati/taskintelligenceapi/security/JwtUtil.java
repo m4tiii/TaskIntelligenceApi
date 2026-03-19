@@ -24,8 +24,8 @@ public class JwtUtil {
     private static final String SECRET_CUSTOM = "qwertyuiopasdfghjklzxcvbnm1234567890";
     
     // Czas życia tokena w milisekundach.
-    // 1000ms * 60s * 60m * 10h = 10 godzin ważności.
-    private static final long EXPIRATION_TIME = 1000*60*60*10;
+    private static final long EXPIRATION_TIME = 1000*60*30;
+    private static final long REFRESH_EXPIRATION_TIME = 1000*60*60*24*7; //
 
     /**
      * Metoda przygotowująca klucz kryptograficzny w formacie wymaganym przez bibliotekę JJWT.
@@ -47,6 +47,15 @@ public class JwtUtil {
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Data wygaśnięcia (teraz + 10 godzin)
                 .signWith(getSigningKey()) // Cyfrowy podpis tokena z użyciem naszego tajnego klucza
                 .compact(); // Złożenie tego wszystkiego w jeden długi String (ten, który widzi klient)
+    }
+
+    public String generateRefreshToken(String username){
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
+                .signWith(getSigningKey())
+                .compact();
     }
 
     /**

@@ -1,6 +1,8 @@
 package pl.mati.taskintelligenceapi.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +18,7 @@ import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 import pl.mati.taskintelligenceapi.security.JwtUtil;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -43,14 +46,47 @@ public class AuthController {
         userRepository.save(newUser);
 
         String token = jwtUtil.generateToken(newUser.getUsername());
-        return ResponseEntity.ok(new AuthResponseDTO(token));
+        return ResponseEntity.ok(new AuthResponseDTO(token, ""));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.username(), authRequestDTO.password()));
-        String token = jwtUtil.generateToken(authRequestDTO.username());
-        return ResponseEntity.ok(new AuthResponseDTO(token));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequestDTO.username(), authRequestDTO.password())
+        );
+
+        User user = userRepository.findByUsername(authRequestDTO.username())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        String access = jwtUtil.generateToken(user.getUsername());
+        String refresh = jwtUtil.generateRefreshToken(user.getRefreshToken());
+
+        user.setRefreshToken(refresh);
+        user.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new AuthResponseDTO(access, refresh));
+
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponseDTO> refresh(@RequestBody String refreshToken){
+        String username = jwtUtil.extractUsername(refreshToken);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if(user.getRefreshToken().equals(refreshToken) && user.getRefreshTokenExpiration().isAfter(LocalDateTime.now())){
+
+            String newAccess = jwtUtil.generateToken(username);
+            String newRefresh = jwtUtil.generateRefreshToken(username);
+
+            user.setRefreshToken(newRefresh);
+            user.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
+            userRepository.save(user);
+
+            return ResponseEntity.ok(new AuthResponseDTO(newAccess, newRefresh));
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
 }

@@ -39,6 +39,8 @@ public class TaskServiceTest {
     TaskMapper taskMapper = new TaskMapper();
     @InjectMocks
     TaskService taskService;
+    @InjectMocks
+    SmartTaskService smartTaskService;
 
     @Test
     void shouldReturnTaskWhenFound(){
@@ -163,6 +165,8 @@ public class TaskServiceTest {
         Long taskIdFirst = 123L;
         Long taskIdSecond = 124L;
 
+        Pageable pageable = PageRequest.of(0,2);
+
         Task task1 = new Task();
         task1.setId(taskIdFirst);
         task1.setTitle("titleTest1");
@@ -182,11 +186,11 @@ public class TaskServiceTest {
 
         //When
 
-        List<TaskResponseDTO> tasks = taskService.getSmartTaskList(username);
+        Page<TaskResponseDTO> tasks = smartTaskService.getSmartTaskList(username, pageable);
 
         //Then
-        Assertions.assertEquals(2, tasks.size());
-        Assertions.assertTrue(tasks.get(0).taskPriority() > tasks.get(1).taskPriority());
+        Assertions.assertEquals(2, tasks.getTotalElements());
+        Assertions.assertTrue(tasks.getContent().get(0).taskPriority() > tasks.getContent().get(1).taskPriority());
 
     }
 
