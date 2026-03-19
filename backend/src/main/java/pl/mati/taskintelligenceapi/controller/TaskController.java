@@ -2,6 +2,8 @@ package pl.mati.taskintelligenceapi.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,6 +32,11 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getAllTasksByUserUsername(principal.getName()));
     }
 
+    @GetMapping("/page")
+    public ResponseEntity<Page<TaskResponseDTO>> getPageOfTasks(Pageable pageable, Principal principal){
+        return ResponseEntity.ok(taskService.getPageOfTasks(pageable, principal.getName()));
+    }
+
     @GetMapping("/smartTasks")
     public ResponseEntity<List<TaskResponseDTO>> getAllSmartTasks(Principal principal){
         return ResponseEntity.ok(taskService.getSmartTaskList(principal.getName()));
@@ -49,6 +56,8 @@ public class TaskController {
 
         return ResponseEntity.created(location).body(savedTask);
     }
+
+
 
     @PutMapping("/{requestedId}")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long requestedId,

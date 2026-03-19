@@ -9,6 +9,10 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import pl.mati.taskintelligenceapi.dto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
@@ -114,6 +118,42 @@ public class TaskServiceTest {
         Assertions.assertEquals(2, tasks.size());
         Assertions.assertEquals("titleTest1", tasks.get(0).title());
         Assertions.assertEquals("titleTest2", tasks.get(1).title());
+    }
+
+    @Test
+    void shouldReturnAPageOfTasks(){
+        //Given
+        String username = "userTest";
+        Long taskIdFirst = 123L;
+        Long taskIdSecond = 124L;
+        Long taskIdThird = 125L;
+
+        Pageable pageable = PageRequest.of(0,1);
+
+        Task task1 = new Task();
+        task1.setId(taskIdFirst);
+        task1.setTitle("titleTest1");
+        Task task2 = new Task();
+        task2.setId(taskIdSecond);
+        task2.setTitle("titleTest2");
+        Task task3 = new Task();
+        task3.setId(taskIdThird);
+        task3.setTitle("titleTest3");
+
+        Page<Task> taskPage = new PageImpl<>(List.of(task1,task2, task3));
+
+        Mockito.when(taskRepository.findAllByUserUsername(pageable, username)).thenReturn(taskPage);
+
+        //when
+
+        Page<TaskResponseDTO> response = taskService.getPageOfTasks(pageable, username);
+
+        //Then
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(3, response.getTotalElements());
+        Mockito.verify(taskRepository).findAllByUserUsername(pageable, username);
+
     }
 
     @Test

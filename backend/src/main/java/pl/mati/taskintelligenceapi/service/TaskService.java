@@ -2,6 +2,8 @@ package pl.mati.taskintelligenceapi.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.mati.taskintelligenceapi.dto.TaskRequestDTO;
@@ -80,5 +82,11 @@ public class TaskService {
                         "Task with id: " + id + ", that belongs to user: " + username + " not found!"
                 ));
         taskRepository.delete(taskToDelete);
+    }
+
+    public Page<TaskResponseDTO> getPageOfTasks(Pageable pageable, String name) {
+        Page<Task> tasks = taskRepository.findAllByUserUsername(pageable, name);
+
+        return tasks.map(taskMapper::mapToDto);
     }
 }
