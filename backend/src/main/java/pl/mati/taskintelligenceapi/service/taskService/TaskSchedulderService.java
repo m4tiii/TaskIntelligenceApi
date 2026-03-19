@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.service;
+package pl.mati.taskintelligenceapi.service.taskService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

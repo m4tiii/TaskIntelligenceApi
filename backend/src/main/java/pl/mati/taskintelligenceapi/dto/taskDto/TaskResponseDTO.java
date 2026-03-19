@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.dto;
+package pl.mati.taskintelligenceapi.dto.taskDto;
 
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 

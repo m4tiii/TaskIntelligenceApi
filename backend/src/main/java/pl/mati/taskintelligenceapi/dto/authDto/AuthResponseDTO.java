@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.dto;
+package pl.mati.taskintelligenceapi.dto.authDto;
 
 public record AuthResponseDTO(
         String accessToken,

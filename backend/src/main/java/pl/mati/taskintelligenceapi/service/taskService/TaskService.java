@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.service;
+package pl.mati.taskintelligenceapi.service.taskService;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.mati.taskintelligenceapi.dto.TaskRequestDTO;
-import pl.mati.taskintelligenceapi.dto.TaskResponseDTO;
+import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
+import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 import pl.mati.taskintelligenceapi.entity.User;

@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.service;
+package pl.mati.taskintelligenceapi.service.taskService;
 
 import org.springframework.stereotype.Service;
 import pl.mati.taskintelligenceapi.entity.Task;

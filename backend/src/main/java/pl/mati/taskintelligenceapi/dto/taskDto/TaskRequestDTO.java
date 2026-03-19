@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.dto;
+package pl.mati.taskintelligenceapi.dto.taskDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Max;

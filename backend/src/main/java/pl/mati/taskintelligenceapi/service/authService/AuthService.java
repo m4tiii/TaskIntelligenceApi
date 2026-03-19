@@ -1,0 +1,112 @@
+package pl.mati.taskintelligenceapi.service.authService;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import pl.mati.taskintelligenceapi.dto.authDto.AuthRegisterRequestDTO;
+import pl.mati.taskintelligenceapi.dto.authDto.AuthRequestDTO;
+import pl.mati.taskintelligenceapi.dto.authDto.AuthResponseDTO;
+import pl.mati.taskintelligenceapi.dto.authDto.RefreshTokenRequestDTO;
+import pl.mati.taskintelligenceapi.entity.Role;
+import pl.mati.taskintelligenceapi.entity.User;
+import pl.mati.taskintelligenceapi.repository.UserRepository;
+import pl.mati.taskintelligenceapi.security.JwtUtil;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public AuthResponseDTO login(AuthRequestDTO authRequestDTO){
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequestDTO.username(), authRequestDTO.password())
+        );
+
+        User user = userRepository.findByUsername(authRequestDTO.username())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        String access = jwtUtil.generateToken(user.getUsername());
+        String refresh = jwtUtil.generateRefreshToken(user.getUsername());
+
+        user.setRefreshToken(refresh);
+        user.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
+        userRepository.save(user);
+
+        return new AuthResponseDTO(access, refresh);
+    }
+
+    @Transactional
+    public void logout(Principal principal){
+        User user = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        user.setRefreshToken(null);
+        user.setRefreshTokenExpiration(null);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public AuthResponseDTO refresh(RefreshTokenRequestDTO refreshToken){
+        String username = jwtUtil.extractUsername(refreshToken.refreshToken());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if(
+                user.getRefreshToken() != null &&
+                user.getRefreshToken().equals(refreshToken) &&
+                user.getRefreshTokenExpiration().isAfter(LocalDateTime.now())
+        ){
+            String newAccess = jwtUtil.generateToken(username);
+            String newRefresh = jwtUtil.generateRefreshToken(username);
+
+            user.setRefreshToken(newRefresh);
+            user.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
+            userRepository.save(user);
+
+            return new AuthResponseDTO(newAccess, newRefresh);
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid or expired refresh token");
+    }
+
+    @Transactional
+    public AuthResponseDTO registrerUser(AuthRegisterRequestDTO authRegisterRequestDTO){
+        Optional<User> existingUser = userRepository.findByUsernameAndEmail(authRegisterRequestDTO.username(), authRegisterRequestDTO.email());
+        if(existingUser.isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+        }
+
+        User newUser = new User();
+        newUser.setUsername(authRegisterRequestDTO.username());
+        newUser.setPassword(passwordEncoder.encode(authRegisterRequestDTO.password()));
+        newUser.setEmail(authRegisterRequestDTO.email());
+        newUser.setFirstName(authRegisterRequestDTO.firstName());
+        newUser.setLastName(authRegisterRequestDTO.lastName());
+        newUser.setCountry(authRegisterRequestDTO.country());
+        newUser.setRole(Role.ROLE_USER);
+
+        String access = jwtUtil.generateToken(newUser.getUsername());
+        String refresh = jwtUtil.generateRefreshToken(newUser.getUsername());
+
+        newUser.setRefreshToken(refresh);
+        newUser.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
+
+        userRepository.save(newUser);
+        return new AuthResponseDTO(access, refresh);
+    }
+}

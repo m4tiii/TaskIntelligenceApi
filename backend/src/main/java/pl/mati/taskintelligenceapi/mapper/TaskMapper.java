@@ -1,8 +1,8 @@
 package pl.mati.taskintelligenceapi.mapper;
 
 import org.springframework.stereotype.Component;
-import pl.mati.taskintelligenceapi.dto.TaskRequestDTO;
-import pl.mati.taskintelligenceapi.dto.TaskResponseDTO;
+import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
+import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
 
 @Component

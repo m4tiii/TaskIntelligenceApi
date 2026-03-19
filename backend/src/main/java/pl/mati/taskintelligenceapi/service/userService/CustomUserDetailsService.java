@@ -1,4 +1,4 @@
-package pl.mati.taskintelligenceapi.service;
+package pl.mati.taskintelligenceapi.service.userService;
 
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;

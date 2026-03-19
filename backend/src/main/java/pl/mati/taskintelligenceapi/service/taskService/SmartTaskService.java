@@ -1,11 +1,11 @@
-package pl.mati.taskintelligenceapi.service;
+package pl.mati.taskintelligenceapi.service.taskService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.mati.taskintelligenceapi.dto.TaskResponseDTO;
+import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 import pl.mati.taskintelligenceapi.mapper.TaskMapper;
