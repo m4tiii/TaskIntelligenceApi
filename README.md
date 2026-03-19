@@ -61,7 +61,7 @@ $$S = \frac{Ważność \times 10}{\max(1, DniDoDeadline)}$$
 
 ---
 
-[!TIP]
+>[!TIP]
 Access interactive API docs at: http://localhost:8080/swagger-ui/index.html
 
 ---
