@@ -2,11 +2,11 @@
   <h1>🧠 TaskIntelligence System</h1>
   <p><b>Smart Task Management with Automated Prioritization Engine</b></p>
   <p>
-    [![Java Version](https://img.shields.io/badge/Java-25-orange?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
-    [![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.3-green?style=for-the-badge&logo=springboot)](https://spring.io/projects/spring-boot)
-    [![Angular](https://img.shields.io/badge/Angular-21-red?style=for-the-badge&logo=angular)](https://angular.dev/)
-    [![Security](https://img.shields.io/badge/Security-JWT-blue?style=for-the-badge&logo=jsonwebtokens)](https://jwt.io/)
-    [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+    <img src="https://img.shields.io/badge/Java-25-orange?style=for-the-badge&logo=openjdk" alt="Java Version">
+    <img src="https://img.shields.io/badge/Spring_Boot-4.0.3-green?style=for-the-badge&logo=springboot" alt="Spring Boot">
+    <img src="https://img.shields.io/badge/Angular-21-red?style=for-the-badge&logo=angular" alt="Angular">
+    <img src="https://img.shields.io/badge/Security-JWT-blue?style=for-the-badge&logo=jsonwebtokens" alt="Security">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT">
   </p>
 </div>
 
