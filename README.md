@@ -76,7 +76,7 @@ $$S = \frac{Ważność \times 10}{\max(1, DniDoDeadline)}$$
 ---
 
 >[!TIP]
-Access interactive API docs at: http://localhost:8080/swagger-ui/index.html
+Access interactive API docs at: http://localhost:8080/swagger-ui/index.html after running a project
 
 >[!NOTE]
 The Frontend application is currently in its initial setup phase. Integration with the Backend API is under active development.
