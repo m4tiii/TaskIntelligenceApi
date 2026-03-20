@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 
@@ -50,7 +49,7 @@ public class Task {
     private int importance;
 
     @Schema(description = "Status of the task", example = "NEW")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
     @Schema(description = "How important task is in scale 1-100", example = "40")

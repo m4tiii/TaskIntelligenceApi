@@ -60,4 +60,7 @@ public class User {
 
     @Schema(description = "Expiration date of the refresh token", example = "2026-03-24 12:30")
     private LocalDateTime refreshTokenExpiration;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Statistics> statistics;
 }

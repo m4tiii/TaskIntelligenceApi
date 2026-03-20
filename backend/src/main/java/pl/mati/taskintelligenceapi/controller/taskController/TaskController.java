@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.mati.taskintelligenceapi.dto.taskDto.StatusUpdateDto;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.service.taskService.TaskService;
@@ -107,5 +108,16 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long requestedId, Principal principal){
         taskService.deleteTask(requestedId, principal.getName());
         return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated"),
+            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT"),
+            @ApiResponse(responseCode = "404", description = "Task not found"),
+            @ApiResponse(responseCode = "400", description = "Validation error")
+    })
+    @PatchMapping("/{requestedId}/updateStatus")
+    public ResponseEntity<TaskResponseDTO> updateTaskStatus(@PathVariable Long requestedId, @Valid @RequestBody StatusUpdateDto status, Principal principal){
+        return ResponseEntity.ok(taskService.patchTaskStatus(requestedId, status, principal.getName()));
     }
 }

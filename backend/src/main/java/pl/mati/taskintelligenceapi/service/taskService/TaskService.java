@@ -6,15 +6,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.mati.taskintelligenceapi.dto.taskDto.StatusUpdateDto;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
+import pl.mati.taskintelligenceapi.entity.Statistics;
 import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.TaskStatus;
 import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.mapper.TaskMapper;
+import pl.mati.taskintelligenceapi.repository.StatisticRepository;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,6 +30,7 @@ public class TaskService {
     private final UserRepository userRepository;
     private final TaskPriorityService taskPriorityService;
     private final TaskMapper taskMapper;
+    private final StatisticRepository statisticRepository;
 
     public List<TaskResponseDTO> getAllTasksByUserUsername(String username){
         List<Task> tasks = taskRepository.findAllByUserUsername(username);
@@ -79,5 +85,24 @@ public class TaskService {
         Page<Task> tasks = taskRepository.findAllByUserUsername(pageable, name);
 
         return tasks.map(taskMapper::mapToDto);
+    }
+
+    public TaskResponseDTO patchTaskStatus(Long requestedId, StatusUpdateDto taskStatus, String username) {
+        Task task = taskRepository.findByIdAndUserUsername(requestedId, username)
+                .orElseThrow(() -> new EntityNotFoundException("Task with id: " + requestedId + " not found!"));
+
+        task.setTaskStatus(taskStatus.status().equals("COMPLETED") ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS);
+        taskRepository.save(task);
+
+        if (taskStatus.status().equals("COMPLETED")) {
+            Statistics statistics = new Statistics();
+            statistics.setScore(taskPriorityService.calculateScore(task));
+            statistics.setWeekNumber(LocalDate.now().get(WeekFields.ISO.weekOfYear()));
+            statistics.setYear(LocalDate.now().getYear());
+            statistics.setUser(task.getUser());
+            statisticRepository.save(statistics);
+        }
+
+        return taskMapper.mapToDto(task);
     }
 }

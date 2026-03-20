@@ -24,4 +24,9 @@ public class TaskPriorityService {
 
         return score;
     }
+
+    public int calculateScore(Task task) {
+        double daysToDeadLine = ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadlineTo())/24.0;
+        return  (int) ((task.getImportance() * 10) + (daysToDeadLine * 5));
+    }
 }
