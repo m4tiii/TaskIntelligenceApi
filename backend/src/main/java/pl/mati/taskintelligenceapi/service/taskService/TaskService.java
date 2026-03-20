@@ -47,6 +47,7 @@ public class TaskService {
         Task task = taskMapper.mapToTask(taskRequestDTO);
         task.setUser(user);
         task.setTaskStatus(TaskStatus.NEW);
+        task.setPriorityScore(taskPriorityService.calculatePriority(task));
         return taskMapper.mapToDto(taskRepository.save(task));
     }
 

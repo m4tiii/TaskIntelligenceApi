@@ -11,6 +11,7 @@ import pl.mati.taskintelligenceapi.entity.TaskStatus;
 import pl.mati.taskintelligenceapi.mapper.TaskMapper;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 
+import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,5 +44,13 @@ public class SmartTaskService {
 
         List<TaskResponseDTO> subList = allTasks.subList(start, end);
         return new PageImpl<>(subList, pageable, allTasks.size());
+    }
+
+    public List<TaskResponseDTO> getSuggestions(Principal principal) {
+
+        return taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(principal.getName(), 30)
+                .stream()
+                .map(taskMapper::mapToDto)
+                .toList();
     }
 }

@@ -3,7 +3,6 @@ package pl.mati.taskintelligenceapi.service.authService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,7 +68,7 @@ public class AuthService {
 
         if(
                 user.getRefreshToken() != null &&
-                user.getRefreshToken().equals(refreshToken) &&
+                user.getRefreshToken().equals(refreshToken.refreshToken()) &&
                 user.getRefreshTokenExpiration().isAfter(LocalDateTime.now())
         ){
             String newAccess = jwtUtil.generateToken(username);
