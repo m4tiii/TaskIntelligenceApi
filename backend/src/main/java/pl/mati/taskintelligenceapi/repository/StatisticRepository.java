@@ -2,6 +2,12 @@ package pl.mati.taskintelligenceapi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.mati.taskintelligenceapi.entity.Statistics;
+import pl.mati.taskintelligenceapi.entity.User;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface StatisticRepository extends JpaRepository<Statistics, Long> {
+
+    List<Statistics> findAllByUserAndCompletionDateBetween(User user, LocalDate from, LocalDate to);
 }

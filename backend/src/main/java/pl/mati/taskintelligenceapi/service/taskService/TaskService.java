@@ -19,7 +19,6 @@ import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -87,6 +86,7 @@ public class TaskService {
         return tasks.map(taskMapper::mapToDto);
     }
 
+    @Transactional
     public TaskResponseDTO patchTaskStatus(Long requestedId, StatusUpdateDto taskStatus, String username) {
         Task task = taskRepository.findByIdAndUserUsername(requestedId, username)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id: " + requestedId + " not found!"));
@@ -97,9 +97,8 @@ public class TaskService {
         if (taskStatus.status().equals("COMPLETED")) {
             Statistics statistics = new Statistics();
             statistics.setScore(taskPriorityService.calculateScore(task));
-            statistics.setWeekNumber(LocalDate.now().get(WeekFields.ISO.weekOfYear()));
-            statistics.setYear(LocalDate.now().getYear());
             statistics.setUser(task.getUser());
+            statistics.setCompletionDate(LocalDate.now());
             statisticRepository.save(statistics);
         }
 

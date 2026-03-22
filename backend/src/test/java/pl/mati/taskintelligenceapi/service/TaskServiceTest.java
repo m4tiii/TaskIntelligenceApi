@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -38,8 +37,8 @@ public class TaskServiceTest {
     UserRepository userRepository;
     @Mock
     TaskPriorityService taskPriorityService;
-    @Spy
-    TaskMapper taskMapper = new TaskMapper();
+    @Mock
+    TaskMapper taskMapper;
     @InjectMocks
     TaskService taskService;
     @InjectMocks
@@ -56,10 +55,12 @@ public class TaskServiceTest {
         task.setUser(user);
 
         Mockito.when(taskRepository.findByIdAndUserUsername(task.getId(), user.getUsername())).thenReturn(Optional.of(task));
-        
+        TaskResponseDTO expectedDto = new TaskResponseDTO(999L, "titleTest", null, null, null, 0, null, 0.0);
+        Mockito.when(taskMapper.mapToDto(task)).thenReturn(expectedDto);
+
         // When
         TaskResponseDTO taskResponseDTO = taskService.getTaskById(task.getId(), user.getUsername());
-        
+
         // Then
         Assertions.assertNotNull(taskResponseDTO);
         Assertions.assertEquals("titleTest", taskResponseDTO.title());
@@ -91,6 +92,9 @@ public class TaskServiceTest {
         TaskRequestDTO updateRequest = new TaskRequestDTO("updatedTitle", "updatedDescription", LocalDateTime.of(2026, Month.MARCH, 31, 12,15), 5, TaskStatus.NEW);
         Mockito.when(taskRepository.findByIdAndUserUsername(taskId, username)).thenReturn(Optional.of(existingTask));
 
+        TaskResponseDTO updatedDto = new TaskResponseDTO(taskId, "updatedTitle", "updatedDescription", null, null, 5, TaskStatus.NEW, 0.0);
+        Mockito.when(taskMapper.mapToDto(existingTask)).thenReturn(updatedDto);
+
         //When
 
         TaskResponseDTO updatedTaskDTO = taskService.updateTask(taskId,updateRequest,username);
@@ -115,6 +119,11 @@ public class TaskServiceTest {
         task2.setTitle("titleTest2");
 
         Mockito.when(taskRepository.findAllByUserUsername(username)).thenReturn(List.of(task1, task2));
+
+        TaskResponseDTO dto1 = new TaskResponseDTO(taskIdFirst, "titleTest1", null, null, null, 0, null, 0.0);
+        TaskResponseDTO dto2 = new TaskResponseDTO(taskIdSecond, "titleTest2", null, null, null, 0, null, 0.0);
+        Mockito.when(taskMapper.mapToDto(task1)).thenReturn(dto1);
+        Mockito.when(taskMapper.mapToDto(task2)).thenReturn(dto2);
 
         //When
         List<TaskResponseDTO> tasks = taskService.getAllTasksByUserUsername(username);
@@ -186,6 +195,11 @@ public class TaskServiceTest {
         Mockito.when(taskRepository.findAllByUserUsername(username)).thenReturn(List.of(task1, task2));
         Mockito.when(taskPriorityService.calculatePriority(task1)).thenReturn(100.0);
         Mockito.when(taskPriorityService.calculatePriority(task2)).thenReturn(50.0);
+
+        TaskResponseDTO dto1 = new TaskResponseDTO(taskIdFirst, "titleTest1", null, null, null, 10, null, 100.0);
+        TaskResponseDTO dto2 = new TaskResponseDTO(taskIdSecond, "titleTest2", null, null, null, 5, null, 50.0);
+        Mockito.when(taskMapper.mapToDto(task1)).thenReturn(dto1);
+        Mockito.when(taskMapper.mapToDto(task2)).thenReturn(dto2);
 
         //When
 
@@ -279,6 +293,15 @@ public class TaskServiceTest {
         TaskRequestDTO taskRequestDTO = new TaskRequestDTO("testTitle", "testDescription", LocalDateTime.of(2026, Month.MARCH, 31, 12,15), 5, TaskStatus.NEW);
         Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(savedTask);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(testUser));
+
+        Task mappedTask = new Task();
+        mappedTask.setTitle("testTitle");
+        mappedTask.setDescription("testDescription");
+        Mockito.when(taskMapper.mapToTask(taskRequestDTO)).thenReturn(mappedTask);
+
+        TaskResponseDTO createdDto = new TaskResponseDTO(taskId, "testTitle", "testDescription", null, null, 0, TaskStatus.NEW, 0.0);
+        Mockito.when(taskMapper.mapToDto(savedTask)).thenReturn(createdDto);
+
         //When
         TaskResponseDTO createdTaskDTO = taskService.createTask(taskRequestDTO, username);
         //Then

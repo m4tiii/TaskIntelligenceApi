@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "statistics")
@@ -19,19 +21,16 @@ public class Statistics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Score achieved", example = "85")
+    @Column(nullable = false)
+    private double score;
+
+    @Column(nullable = false)
+    @Schema(description = "Date of task's completion", example = "2026-03-22")
+    private LocalDate completionDate;
+
     @Schema(description = "User associated with these statistics")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Schema(description = "Score achieved", example = "85")
-    private int score;
-
-    @Schema(description = "ISO week number", example = "12")
-    @Column(nullable = false)
-    private int weekNumber;
-
-    @Schema(description = "Year of the statistics", example = "2024")
-    @Column(nullable = false)
-    private int year;
 }
