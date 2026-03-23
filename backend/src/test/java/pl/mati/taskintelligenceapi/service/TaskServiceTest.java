@@ -205,7 +205,9 @@ public class TaskServiceTest {
         task2.setImportance(5);
         task2.setDeadlineTo(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
 
-        Mockito.when(taskRepository.findAllByUserUsername(username)).thenReturn(List.of(task1, task2));
+        Page<Task> taskPage = new PageImpl<>(List.of(task1, task2), pageable, List.of(task1, task2).size());
+
+        Mockito.when(taskRepository.findAllByUserUsername(pageable, username)).thenReturn(taskPage);
         Mockito.when(taskPriorityService.calculatePriority(task1)).thenReturn(100.0);
         Mockito.when(taskPriorityService.calculatePriority(task2)).thenReturn(50.0);
 
