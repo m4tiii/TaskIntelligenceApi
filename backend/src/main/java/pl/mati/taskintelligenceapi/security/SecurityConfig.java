@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,12 +22,25 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception{
-        return authConfig.getAuthenticationManager();
+    public org.springframework.security.authentication.AuthenticationProvider authenticationProvider(
+            pl.mati.taskintelligenceapi.service.userService.CustomUserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        org.springframework.security.authentication.dao.DaoAuthenticationProvider authProvider =
+                new org.springframework.security.authentication.dao.DaoAuthenticationProvider(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
     }
-    
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            pl.mati.taskintelligenceapi.service.userService.CustomUserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        return new org.springframework.security.authentication.ProviderManager(
+                authenticationProvider(userDetailsService, passwordEncoder));
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf -> csrf.disable());

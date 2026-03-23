@@ -34,7 +34,7 @@ public class TaskService {
     public List<TaskResponseDTO> getAllTasksByUserUsername(String username){
         List<Task> tasks = taskRepository.findAllByUserUsername(username);
         return tasks.stream()
-                .map(taskMapper::mapToDto)
+                .map(taskMapper::toDto)
                 .toList();
     }
 
@@ -42,18 +42,18 @@ public class TaskService {
     public TaskResponseDTO getTaskById(Long id, String username){
         Task task = taskRepository.findByIdAndUserUsername(id, username)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id: " + id + ", that belongs to user: " + username + " not found!"));
-        return taskMapper.mapToDto(task);
+        return taskMapper.toDto(task);
     }
 
     @Transactional
     public TaskResponseDTO createTask(TaskRequestDTO taskRequestDTO, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with id: " + username + " not found!"));
-        Task task = taskMapper.mapToTask(taskRequestDTO);
+        Task task = taskMapper.toTask(taskRequestDTO);
         task.setUser(user);
         task.setTaskStatus(TaskStatus.NEW);
         task.setPriorityScore(taskPriorityService.calculatePriority(task));
-        return taskMapper.mapToDto(taskRepository.save(task));
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Transactional
@@ -68,7 +68,7 @@ public class TaskService {
         task.setImportance(taskRequestDTO.importance());
         task.setDeadlineTo(taskRequestDTO.deadline());
         task.setPriorityScore(taskPriorityService.calculatePriority(task));
-        return taskMapper.mapToDto(task);
+        return taskMapper.toDto(task);
     }
 
     @Transactional
@@ -83,7 +83,7 @@ public class TaskService {
     public Page<TaskResponseDTO> getPageOfTasks(Pageable pageable, String name) {
         Page<Task> tasks = taskRepository.findAllByUserUsername(pageable, name);
 
-        return tasks.map(taskMapper::mapToDto);
+        return tasks.map(taskMapper::toDto);
     }
 
     @Transactional
@@ -102,6 +102,6 @@ public class TaskService {
             statisticRepository.save(statistics);
         }
 
-        return taskMapper.mapToDto(task);
+        return taskMapper.toDto(task);
     }
 }

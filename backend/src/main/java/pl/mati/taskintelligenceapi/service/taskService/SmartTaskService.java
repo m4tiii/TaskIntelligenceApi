@@ -28,7 +28,7 @@ public class SmartTaskService {
                 .filter(t -> t.getTaskStatus() != TaskStatus.COMPLETED)
                 .peek(t -> t.setPriorityScore(taskPriorityService.calculatePriority(t)))
                 .sorted(Comparator.comparingDouble(Task::getPriorityScore).reversed())
-                .map(taskMapper::mapToDto)
+                .map(taskMapper::toDto)
                 .toList();
 
         return getPageFromFullList(tasks, pageable);
@@ -50,7 +50,7 @@ public class SmartTaskService {
 
         return taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(principal.getName(), 30)
                 .stream()
-                .map(taskMapper::mapToDto)
+                .map(taskMapper::toDto)
                 .toList();
     }
 }
