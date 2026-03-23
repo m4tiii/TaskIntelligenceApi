@@ -46,7 +46,7 @@ public class SmartTaskService {
 
     public List<TaskResponseDTO> getSuggestions(Principal principal) {
 
-        return taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(principal.getName(), 40)
+        return taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(principal.getName(), 30)
                 .stream()
                 .map(taskMapper::toDto)
                 .toList();

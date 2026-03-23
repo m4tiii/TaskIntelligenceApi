@@ -66,4 +66,5 @@ public class StatisticsRepositoryTest {
         assertThat(results).hasSize(3);
     }
 
+
 }

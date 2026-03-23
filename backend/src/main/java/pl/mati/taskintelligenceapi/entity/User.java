@@ -2,6 +2,7 @@ package pl.mati.taskintelligenceapi.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class User {
 
     @Schema(description = "Email of the user", example = "john.doe@gmail.com")
     @Column(nullable = false, unique = true)
+    @Email
     private String email;
 
     @Schema(description = "First name of the user", example = "John")
@@ -53,6 +55,7 @@ public class User {
 
     @Schema(description = "Role of the user", example = "ROLE_USER")
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     @Schema(description = "Refresh token of the user", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIi")

@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class TaskPriorityService {
     public double calculatePriority(Task task){
-        if(task.getTaskStatus() == TaskStatus.COMPLETED) return 0;
+        if(task.getTaskStatus() == TaskStatus.COMPLETED) return task.getPriorityScore();
 
         long daysToDeadLine = ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadlineTo())/24;
 

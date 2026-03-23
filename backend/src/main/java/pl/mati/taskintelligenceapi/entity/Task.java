@@ -47,6 +47,7 @@ public class Task {
 
     @Schema(description = "Importance of the task", example = "1")
     @Min(1) @Max(10)
+    @Column(nullable = false)
     private int importance;
 
     @Schema(description = "Status of the task", example = "NEW")

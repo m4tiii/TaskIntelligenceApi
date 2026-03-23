@@ -13,11 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import pl.mati.taskintelligenceapi.dto.taskDto.StatusUpdateDto;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 import pl.mati.taskintelligenceapi.entity.User;
+import pl.mati.taskintelligenceapi.entity.enums.TimeRange;
 import pl.mati.taskintelligenceapi.mapper.TaskMapper;
 import pl.mati.taskintelligenceapi.repository.StatisticRepository;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
@@ -26,6 +28,8 @@ import pl.mati.taskintelligenceapi.service.taskService.SmartTaskService;
 import pl.mati.taskintelligenceapi.service.taskService.TaskPriorityService;
 import pl.mati.taskintelligenceapi.service.taskService.TaskService;
 
+import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
@@ -52,6 +56,23 @@ public class TaskServiceTest {
     void setUp(){
         taskService = new TaskService(taskRepository, userRepository, taskPriorityService, taskMapper, statisticRepository);
         smartTaskService = new SmartTaskService(taskRepository, taskMapper, taskPriorityService);
+    }
+
+    private Task buildTask(Long id, String title, double priorityScore, TaskStatus status){
+        Task task = new Task();
+
+        task.setId(id);
+        task.setTitle(title);
+        task.setPriorityScore(priorityScore);
+        task.setTaskStatus(status);
+        task.setImportance(5);
+        task.setDeadlineTo(LocalDateTime.now().plusDays(3));
+        return task;
+    }
+
+
+    private TaskResponseDTO buildTaskResponseDTO(Long id, String title, double priorityScore, TaskStatus status){
+        return new TaskResponseDTO(id, title, null, LocalDateTime.now(), LocalDateTime.now(), 5, status, priorityScore);
     }
 
     @Test
@@ -346,5 +367,242 @@ public class TaskServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> taskService.createTask(taskRequestDTO, username));
         Mockito.verify(taskRepository, Mockito.never()).save(Mockito.any(Task.class));
 
+    }
+
+    @Test
+    void shouldReturnSuggestionsWhenTasksExceedThreshold(){
+        //Given
+       String username = "testUser";
+       Principal principal = Mockito.mock(Principal.class);
+       Mockito.when(principal.getName()).thenReturn(username);
+
+       Task highPriorityTask = buildTask(1L, "High Priority Task", 55.0, TaskStatus.NEW);
+       Task highPriorityTask2 = buildTask(2L, "High Priority Task", 35.0, TaskStatus.NEW);
+
+       TaskResponseDTO highPriorityDto = buildTaskResponseDTO(1L, "High Priority Task", 55.0, TaskStatus.IN_PROGRESS);
+       TaskResponseDTO highPriorityDto2 = buildTaskResponseDTO(2L, "High Priority Task2", 35.0, TaskStatus.NEW);
+
+       Mockito.when(taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30)).thenReturn(List.of(highPriorityTask, highPriorityTask2));
+       Mockito.when(taskMapper.toDto(highPriorityTask)).thenReturn(highPriorityDto);
+       Mockito.when(taskMapper.toDto(highPriorityTask2)).thenReturn(highPriorityDto2);
+
+       //When
+        List<TaskResponseDTO> result = smartTaskService.getSuggestions(principal);
+
+        //Then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals("High Priority Task", result.get(0).title());
+        Assertions.assertEquals("High Priority Task2", result.get(1).title());
+        Mockito.verify(taskRepository).findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30);
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoTasksExceedThreshold(){
+        //Given
+        String username = "testUser";
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(username);
+
+        Mockito.when(taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30)).thenReturn(List.of());
+
+        //When
+
+        List<TaskResponseDTO> result = smartTaskService.getSuggestions(principal);
+
+        //Then
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.isEmpty());
+        Mockito.verify(taskRepository).findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30);
+        Mockito.verifyNoInteractions(taskMapper);
+    }
+
+    @Test
+    void shouldMapEachReturnedTaskToDto(){
+        //Given
+        String username = "userTest";
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(username);
+
+        Task task = buildTask(3L, "Mapped Task", 45.0, TaskStatus.NEW);
+        TaskResponseDTO dto = buildTaskResponseDTO(3L, "MappedTask", 45.0, TaskStatus.NEW);
+        Mockito.when(taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30)).thenReturn(List.of(task));
+        Mockito.when(taskMapper.toDto(task)).thenReturn(dto);
+
+        //Then
+        List<TaskResponseDTO> result = smartTaskService.getSuggestions(principal);
+
+        //Then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
+        Mockito.verify(taskMapper, Mockito.times(1)).toDto(task);
+    }
+
+    @Test
+    void shouldPassCorrectUsernameToRepository(){
+        //Given
+        String username = "userTest";
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(username);
+        Mockito.when(taskRepository.findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30)).thenReturn(List.of());
+
+        //Then
+        List<TaskResponseDTO> result = smartTaskService.getSuggestions(principal);
+
+        //Then
+        Mockito.verify(taskRepository).findAllByUserUsernameAndPriorityScoreGreaterThanSorted(username, 30);
+    }
+
+    @Test
+    void shouldReturnCalculatedPriorityScore(){
+        //Given
+        TaskPriorityService taskPriorityService1 = new TaskPriorityService();
+        Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
+
+        //When
+        int priorityScore = taskPriorityService1.calculateScore(task);
+
+        //Then
+        Assertions.assertEquals(65, priorityScore);
+
+    }
+
+    @Test
+    void shouldReturnCalculatedPriority(){
+        //Given
+        TaskPriorityService taskPriorityService1 = new TaskPriorityService();
+        Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
+        task.setDeadlineTo(LocalDateTime.now().plusDays(3).plusMinutes(30));
+        double calculatedPriority = 50/3.0;
+
+        //When
+        double priorityScore = taskPriorityService1.calculatePriority(task);
+
+        //Then
+        Assertions.assertEquals(calculatedPriority, priorityScore, 0.001);
+
+    }
+
+    @Test
+    void shouldReturnZeroForCompletedTask(){
+        //Given
+        TaskPriorityService taskPriorityService1 = new TaskPriorityService();
+        Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.COMPLETED);
+
+        //When
+        double result = taskPriorityService1.calculatePriority(task);
+
+        //Then
+        Assertions.assertEquals(0.0, result);
+    }
+
+    @Test
+    void shouldAddPenaltyWhenDeadlineIsOverdue(){
+        //Given
+        TaskPriorityService taskPriorityService1 = new TaskPriorityService();
+        Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
+        task.setDeadlineTo(LocalDateTime.now().minusDays(1));
+        double calculatedPriority = 50/1 + 50;
+
+        //When
+        double priorityScore = taskPriorityService1.calculatePriority(task);
+
+        //Then
+        Assertions.assertEquals(calculatedPriority, priorityScore, 0.001);
+    }
+
+    @Test
+    void shouldUseFactorOneWhenDeadlineIsToday(){
+        //Given
+        TaskPriorityService taskPriorityService1 = new TaskPriorityService();
+        Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
+        task.setDeadlineTo(LocalDateTime.now());
+        double calculatedPriority = 50.0;
+
+        //When
+        double priorityScore = taskPriorityService1.calculatePriority(task);
+
+        //Then
+        Assertions.assertEquals(calculatedPriority, priorityScore, 0.001);
+    }
+
+    @Test
+    void shouldReturnHigherPriorityForHighImportance(){
+        //Given
+        TaskPriorityService taskPriorityService1 = new TaskPriorityService();
+        Task highTask = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
+        highTask.setImportance(10);
+        Task lowTask = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
+        lowTask.setImportance(1);
+
+        //When
+        double highTaskPrior = taskPriorityService1.calculatePriority(highTask);
+        double lowTaskPrior = taskPriorityService1.calculatePriority(lowTask);
+
+        //Then
+
+        Assertions.assertTrue(highTaskPrior > lowTaskPrior);
+    }
+
+    @Test
+    void shouldSetCompletedStatusAndSaveStatistics(){
+        //Given
+        Task task = buildTask(1L, "testUser", 0.0 , TaskStatus.IN_PROGRESS);
+        User user = new User();
+        user.setUsername("testUser");
+        task.setUser(user);
+        StatusUpdateDto statusUpdateDto = new StatusUpdateDto("COMPLETED");
+        TaskResponseDTO taskResponseDTO = buildTaskResponseDTO(1L, "testUser", 0.0 , TaskStatus.COMPLETED);
+
+        Mockito.when(taskRepository.findByIdAndUserUsername(task.getId(), "testUser")).thenReturn(Optional.of(task));
+        Mockito.when(taskPriorityService.calculateScore(task)).thenReturn(100);
+        Mockito.when(taskMapper.toDto(task)).thenReturn(taskResponseDTO);
+
+        //Then
+        TaskResponseDTO result = taskService.patchTaskStatus(task.getId(), statusUpdateDto, "testUser");
+
+        //Then
+        Assertions.assertEquals(TaskStatus.COMPLETED, result.status());
+        Mockito.verify(taskRepository).save(task);
+        Mockito.verify(statisticRepository).save(Mockito.argThat(stats ->
+                    stats.getScore() == 100 &&
+                    stats.getUser().getUsername().equals("testUser") &&
+                    stats.getCompletionDate().equals(LocalDate.now())
+                ));
+        Assertions.assertNotNull(result);
+    }
+
+    @Test
+    void shouldSetInProgressStatusAndNotSaveStatistics(){
+        //Given
+        Task task = buildTask(1L, "testUser", 0.0 , TaskStatus.IN_PROGRESS);
+        StatusUpdateDto statusUpdateDto = new StatusUpdateDto("IN_PROGRESS");
+        TaskResponseDTO taskResponseDTO = buildTaskResponseDTO(1L, "testUser", 0.0 , TaskStatus.IN_PROGRESS);
+
+        Mockito.when(taskRepository.findByIdAndUserUsername(task.getId(), "testUser")).thenReturn(Optional.of(task));
+        Mockito.when(taskMapper.toDto(task)).thenReturn(taskResponseDTO);
+        //When
+
+        TaskResponseDTO result = taskService.patchTaskStatus(task.getId(), statusUpdateDto, "testUser");
+
+        //Then
+        Assertions.assertEquals(TaskStatus.IN_PROGRESS, result.status());
+        Mockito.verify(taskRepository).save(task);
+        Mockito.verifyNoInteractions(statisticRepository);
+        Mockito.verifyNoInteractions(taskPriorityService);
+        Assertions.assertNotNull(result);
+    }
+
+    @Test
+    void shouldThrowWhenTaskNotFound(){
+        //Given
+        StatusUpdateDto dto = new StatusUpdateDto("COMPLETED");
+        Mockito.when(taskRepository.findByIdAndUserUsername(999L, "testUser")).thenReturn(Optional.empty());
+
+        //When & Then
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> taskService.patchTaskStatus(999L, dto, "testUser"));
+        Mockito.verifyNoInteractions(statisticRepository);
+        Mockito.verifyNoInteractions(taskPriorityService);
     }
 }
