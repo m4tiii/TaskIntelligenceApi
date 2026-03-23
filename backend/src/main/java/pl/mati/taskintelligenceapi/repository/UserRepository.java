@@ -7,8 +7,7 @@ import pl.mati.taskintelligenceapi.entity.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @EntityGraph(attributePaths = {"user"})
+
     Optional<User> findByUsername(String username);
-    @EntityGraph(attributePaths = {"user"})
     Optional<User> findByUsernameAndEmail(String username, String email);
 }

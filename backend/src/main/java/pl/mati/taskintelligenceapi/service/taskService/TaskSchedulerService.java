@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TaskSchedulderService {
+public class TaskSchedulerService {
     private final TaskRepository taskRepository;
     private final TaskPriorityService taskPriorityService;
 

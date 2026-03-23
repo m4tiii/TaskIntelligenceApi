@@ -11,7 +11,7 @@ import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.service.taskService.TaskPriorityService;
-import pl.mati.taskintelligenceapi.service.taskService.TaskSchedulderService;
+import pl.mati.taskintelligenceapi.service.taskService.TaskSchedulerService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +23,7 @@ public class TaskSchedulerServiceTest {
     @Mock
     TaskPriorityService taskPriorityService;
     @InjectMocks
-    TaskSchedulderService taskSchedulderService;
+    TaskSchedulerService taskSchedulerService;
 
     private Task buildTask(Long id, TaskStatus status) {
         Task task = new Task();
@@ -46,7 +46,7 @@ public class TaskSchedulerServiceTest {
         Mockito.when(taskPriorityService.calculatePriority(task2)).thenReturn(8.0);
 
         //When
-        taskSchedulderService.updateAllPriorities();
+        taskSchedulerService.updateAllPriorities();
 
         //Then
         Assertions.assertEquals(7.5, task1.getPriorityScore());
@@ -62,7 +62,7 @@ public class TaskSchedulerServiceTest {
         Mockito.when(taskRepository.findAllByTaskStatusNot(TaskStatus.COMPLETED)).thenReturn(List.of());
 
         //When
-        taskSchedulderService.updateAllPriorities();
+        taskSchedulerService.updateAllPriorities();
 
         //Then
         Mockito.verify(taskRepository).saveAll(List.of());
@@ -78,7 +78,7 @@ public class TaskSchedulerServiceTest {
         Mockito.when(taskRepository.findAllByTaskStatusNot(TaskStatus.COMPLETED)).thenReturn(List.of(task1, task2));
 
         //When
-        taskSchedulderService.updateAllPriorities();
+        taskSchedulerService.updateAllPriorities();
 
         //Then
         Mockito.verify(taskPriorityService, Mockito.times(1)).calculatePriority(task1);

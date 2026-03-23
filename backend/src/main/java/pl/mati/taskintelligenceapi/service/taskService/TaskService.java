@@ -91,7 +91,7 @@ public class TaskService {
         Task task = taskRepository.findByIdAndUserUsername(requestedId, username)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id: " + requestedId + " not found!"));
 
-        task.setTaskStatus(taskStatus.status().equals("COMPLETED") ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS);
+        task.setTaskStatus(taskStatus.status().equals(TaskStatus.COMPLETED) ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS);
         taskRepository.save(task);
 
         if (taskStatus.status().equals("COMPLETED")) {
