@@ -1,15 +1,8 @@
 spring:
-  security:
-    user:
-      name: user
-      password: pass
   application:
     name: Task Intelligence Api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/TaskIntelligenceApiDB
-    username: postgres
-    password: pass
     driver-class-name: org.postgresql.Driver
 
   flyway:
@@ -17,8 +10,6 @@ spring:
     baseline-on-migrate: true
 
   jpa:
-    hibernate:
-      ddl-auto: validate
     show-sql: false
 
   threads:

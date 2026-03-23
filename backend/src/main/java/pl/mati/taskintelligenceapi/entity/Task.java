@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 

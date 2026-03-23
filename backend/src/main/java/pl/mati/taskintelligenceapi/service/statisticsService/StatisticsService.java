@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.mati.taskintelligenceapi.dto.statisticsDto.StatisticsResponseDTO;
 import pl.mati.taskintelligenceapi.dto.statisticsDto.StatsRequestDTO;
 import pl.mati.taskintelligenceapi.entity.Statistics;
-import pl.mati.taskintelligenceapi.entity.TimeRange;
+import pl.mati.taskintelligenceapi.entity.enums.TimeRange;
 import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.repository.StatisticRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;

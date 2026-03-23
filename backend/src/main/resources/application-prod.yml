@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://your_prod_db_host:5432/your_prod_db_name # Zmień na adres produkcyjnej bazy danych
+    username: your_prod_db_user # Zmień na użytkownika produkcyjnego
+    password: your_prod_db_password # Zmień na hasło produkcyjne (rozważ zmienne środowiskowe)
+
+  jpa:
+    hibernate:
+      ddl-auto: validate # Upewnij się, że schemat bazy danych jest zgodny z encjami
+
+logging:
+  level:
+    root: INFO # Zmniejsz poziom logowania w produkcji
+    pl.mati.taskintelligenceapi: INFO # Możesz ustawić konkretne pakiety na DEBUG, jeśli potrzebujesz

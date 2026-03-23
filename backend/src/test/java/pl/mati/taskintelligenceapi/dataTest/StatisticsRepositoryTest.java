@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
-import pl.mati.taskintelligenceapi.entity.Role;
+import pl.mati.taskintelligenceapi.entity.enums.Role;
 import pl.mati.taskintelligenceapi.entity.Statistics;
 import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.repository.StatisticRepository;

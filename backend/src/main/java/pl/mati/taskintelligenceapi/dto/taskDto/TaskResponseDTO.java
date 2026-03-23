@@ -1,6 +1,6 @@
 package pl.mati.taskintelligenceapi.dto.taskDto;
 
-import pl.mati.taskintelligenceapi.entity.TaskStatus;
+import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 

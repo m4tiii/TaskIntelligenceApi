@@ -2,7 +2,7 @@ package pl.mati.taskintelligenceapi.service.taskService;
 
 import org.springframework.stereotype.Service;
 import pl.mati.taskintelligenceapi.entity.Task;
-import pl.mati.taskintelligenceapi.entity.TaskStatus;
+import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

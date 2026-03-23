@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
-import pl.mati.taskintelligenceapi.entity.TaskStatus;
+import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.mapper.TaskMapper;
 import pl.mati.taskintelligenceapi.repository.StatisticRepository;

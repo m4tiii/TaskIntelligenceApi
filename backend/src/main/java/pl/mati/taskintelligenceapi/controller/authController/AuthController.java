@@ -4,13 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,15 +15,9 @@ import pl.mati.taskintelligenceapi.dto.authDto.AuthRegisterRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthResponseDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.RefreshTokenRequestDTO;
-import pl.mati.taskintelligenceapi.entity.Role;
-import pl.mati.taskintelligenceapi.entity.User;
-import pl.mati.taskintelligenceapi.repository.UserRepository;
-import pl.mati.taskintelligenceapi.security.JwtUtil;
 import pl.mati.taskintelligenceapi.service.authService.AuthService;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")

@@ -13,7 +13,7 @@ import pl.mati.taskintelligenceapi.dto.authDto.AuthRegisterRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthResponseDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.RefreshTokenRequestDTO;
-import pl.mati.taskintelligenceapi.entity.Role;
+import pl.mati.taskintelligenceapi.entity.enums.Role;
 import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 import pl.mati.taskintelligenceapi.security.JwtUtil;

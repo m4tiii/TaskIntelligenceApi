@@ -1,7 +1,7 @@
 package pl.mati.taskintelligenceapi.dto.statisticsDto;
 
 import jakarta.validation.constraints.NotNull;
-import pl.mati.taskintelligenceapi.entity.TimeRange;
+import pl.mati.taskintelligenceapi.entity.enums.TimeRange;
 
 import java.time.LocalDate;
 
