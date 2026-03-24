@@ -1,14 +1,14 @@
 -- Dodajemy tylko i wyłącznie JEDNEGO użytkownika do testów. Login: userTest, Hasło: password
 INSERT INTO users (username, email, first_name, last_name, country, password, role)
 VALUES (
-    'userTest',
-    'usertest@gmail.com',
-    'Główny',
-    'Tester',
-    'Poland',
-    '$2a$10$8.UnVuG9HLpUsXVTqe8B9.D0cfR9n9yE7D7A2Zf.v5W1b.m/B3cT6',
-    'ROLE_USER'
-) ON CONFLICT (username) DO NOTHING;
+           'userTest',
+           'usertest@gmail.com',
+           'Główny',
+           'Tester',
+           'Poland',
+           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+           'USER'
+       ) ON CONFLICT (username) DO NOTHING;
 
 -- Generujemy równe 10 000 zadań przypisanych do Ciebie
 INSERT INTO tasks (title, description, created_at, deadline_to, importance, task_status, priority_score, user_id)

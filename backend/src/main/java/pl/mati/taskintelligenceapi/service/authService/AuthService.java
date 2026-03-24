@@ -96,7 +96,7 @@ public class AuthService {
         newUser.setFirstName(authRegisterRequestDTO.firstName());
         newUser.setLastName(authRegisterRequestDTO.lastName());
         newUser.setCountry(authRegisterRequestDTO.country());
-        newUser.setRole(Role.ROLE_USER);
+        newUser.setRole(Role.USER);
 
         return getAuthResponse(newUser);
     }

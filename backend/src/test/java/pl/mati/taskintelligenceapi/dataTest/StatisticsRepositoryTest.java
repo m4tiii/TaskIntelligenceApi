@@ -41,7 +41,7 @@ public class StatisticsRepositoryTest {
                 "Poland",
                 "securePassword123",
                 new ArrayList<>(),
-                Role.ROLE_USER,
+                Role.USER,
                 "some-random-refresh-token",
                 LocalDateTime.now().plusDays(7),
                 new ArrayList<>()
