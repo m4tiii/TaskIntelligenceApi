@@ -1,6 +1,7 @@
 package pl.mati.taskintelligenceapi.service.authService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,6 +41,11 @@ public class AuthService {
         User user = userRepository.findByUsername(authRequestDTO.username())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
+        return getAuthResponse(user);
+    }
+
+    @NotNull
+    private AuthResponseDTO getAuthResponse(User user){
         String access = jwtUtil.generateToken(user.getUsername());
         String refresh = jwtUtil.generateRefreshToken(user.getUsername());
 
@@ -71,14 +77,7 @@ public class AuthService {
                 user.getRefreshToken().equals(refreshToken.refreshToken()) &&
                 user.getRefreshTokenExpiration().isAfter(LocalDateTime.now())
         ){
-            String newAccess = jwtUtil.generateToken(username);
-            String newRefresh = jwtUtil.generateRefreshToken(username);
-
-            user.setRefreshToken(newRefresh);
-            user.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
-            userRepository.save(user);
-
-            return new AuthResponseDTO(newAccess, newRefresh);
+            return getAuthResponse(user);
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid or expired refresh token");
     }
@@ -99,13 +98,6 @@ public class AuthService {
         newUser.setCountry(authRegisterRequestDTO.country());
         newUser.setRole(Role.ROLE_USER);
 
-        String access = jwtUtil.generateToken(newUser.getUsername());
-        String refresh = jwtUtil.generateRefreshToken(newUser.getUsername());
-
-        newUser.setRefreshToken(refresh);
-        newUser.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
-
-        userRepository.save(newUser);
-        return new AuthResponseDTO(access, refresh);
+        return getAuthResponse(newUser);
     }
 }
