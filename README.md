@@ -20,16 +20,27 @@
 
 ## 🇬🇧 English Version
 
+### 📖 Table of Contents
+- [🚀 Overview](#-overview)
+- [🏗️ Architecture & Core Modules](#️-architecture--core-modules)
+- [🧠 The Intelligence Algorithm](#-the-intelligence-algorithm)
+- [🌐 API Endpoints & Capabilities](#-api-endpoints--capabilities)
+- [🎨 Frontend State & Future Steps](#-frontend-state--future-steps)
+- [🛠️ Installation & Setup](#️-installation--setup)
+- [🗺️ Roadmap](#️-roadmap)
+- [📧 Contact](#-contact)
+
 ### 🚀 Overview
 **TaskIntelligence** is a modern, algorithm-driven productivity platform designed to eliminate decision fatigue. It goes beyond simple to-do lists by introducing a custom mathematical **Intelligence Engine** that automatically evaluates and ranks task priorities in real-time. Built entirely with a bleeding-edge tech stack (**Java 25**, **Spring Boot 4**, **Angular 21**), the project is engineered for performance, security, and scalability.
 
 ### 🏗️ Architecture & Core Modules
 The backend follows Domain-Driven Design principles with clean separation of concerns:
-- 🛡️ **Security (Auth):** Robust, stateless JWT authentication (`JJWT 0.12`), custom `JwtFilter`, and Role-Based Access Control.
+- 🛡️ **Security (Auth):** Robust, strict `STATELESS` JWT authentication (`JJWT 0.12`) with `BCryptPasswordEncoder`, custom `JwtFilter`, and native Role-Based Access Control protecting endpoints.
 - 🧠 **SmartTask Engine:** The algorithmic core that continuously calculates and categorizes the urgency of every task.
-- ⏱️ **Task Scheduler:** Background services (`@Scheduled`) recalculating scores system-wide every hour to ensure data reflects reality.
+- ⏱️ **Task Scheduler:** Background services (`@Scheduled`) recalculating scores system-wide every hour, featuring database-level filtering of `COMPLETED` tasks to ensure horizontal scalability without N+1 overhead.
 - 🧯 **Global Exception Handling:** Unified API error responses (`@ControllerAdvice`) across all controllers mapping exceptions to standardized HTTP codes.
 - 💾 **Data Layer:** Clean `DTO` pattern matching with internal Entities, driving seamless interactions with `Hibernate` and `PostgreSQL`.
+- ⚙️ **Infrastructure & Tooling:** Automated database migrations and mock data seeding via **Flyway**, boilerplate reduction and DTO mapping using **MapStruct** & **Lombok**, with environment-specific profiles (dev/prod).
 
 ### 🧠 The Intelligence Algorithm
 The system replaces guesswork with a precise mathematical model implemented in `TaskPriorityService`. The Urgency Score ($S$) is defined as:
@@ -41,30 +52,126 @@ $$S = \frac{Importance \times 10}{\max(1, DaysToDeadline)}$$
 * **Completion State:** Finishing a task reduces its score to **0**, archiving it and removing it from the active calculation pool.
 
 ### 🌐 API Endpoints & Capabilities
-The entire API is cleanly documented using **Springdoc OpenAPI 3.1**, providing an interactive developer experience via Swagger UI:
+The entire API is cleanly documented using **Springdoc OpenAPI 3.1**, providing an interactive developer experience via Swagger UI (configured with global **BearerAuth** for seamless token testing):
+
+**🔐 Authentication & Security**
 * `POST /api/auth/register` - Secure user onboarding with password hashing.
-* `POST /api/auth/login` - Secure login issuing JWT tokens.
-* `GET /api/tasks/smart` - Main dashboard endpoint fetching tasks perfectly sorted by the $S$ score.
-* `PATCH /api/tasks/{id}/status` - Lightning-fast status updates.
+* `POST /api/auth/login` - Secure login issuing access and refresh JWT tokens.
+* `POST /api/auth/refresh` - Seamlessly refresh exhausted access tokens.
+* `POST /api/auth/logout` - Securely invalidate sessions and refresh tokens.
+
+**📋 Task Management (CRUD)**
+* `GET / POST / PUT / DELETE /api/tasks` - Full Task lifecycle management.
+* `GET /api/tasks/page` - Paginated task retrieval for improved performance.
+* `PATCH /api/tasks/{id}/updateStatus` - Lightning-fast status updates.
+
+**🧠 Smart Engine & Analytics**
+* `GET /api/tasks/smart/getAllSmartTasks` - Main dashboard endpoint fetching tasks perfectly sorted by the $S$ score with pagination.
+* `GET /api/tasks/smart/suggestions` - AI-driven suggestions for next steps.
+* `POST /api/tasks/stats` - Endpoint to fetch comprehensive user productivity statistics.
+
+**🛡️ Administration**
+* `GET /api/admin/test` - Role-Based Access Control (RBAC) testing for Administrator roles.
 
 ### 🎨 Frontend State & Future Steps
 > [!NOTE] 
 > The Angular 21 application is currently in its scaffolding phase. The robust architecture is being mapped out, styled with `Tailwind CSS`, and will soon integrate seamlessly with the established RESTful API.
 
+### 🛠️ Installation & Setup
+
+To get this project up and running on your local machine, follow these steps:
+
+#### Prerequisites
+*   **Java**: Version 25 (or compatible JDK)
+*   **Maven**: Latest stable version
+*   **Node.js & npm**: Latest stable version
+*   **PostgreSQL**: Database server
+
+#### Backend Setup
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/TaskIntelligence.git
+    cd TaskIntelligence/backend
+    ```
+2.  **Configure Database:**
+    *   Create a PostgreSQL database (e.g., `taskintelligence_db`).
+    *   Update `src/main/resources/application.yml` (or `application-dev.yml`) with your database credentials:
+        ```yaml
+        spring:
+          datasource:
+            url: jdbc:postgresql://localhost:5432/taskintelligence_db
+            username: your_db_username
+            password: your_db_password
+        ```
+3.  **Build and Run:**
+    ```bash
+    mvn clean install
+    mvn spring-boot:run
+    ```
+    The backend should start on `http://localhost:8080`.
+
+#### Frontend Setup (WIP)
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd ../frontend # Assuming frontend is in a sibling directory
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Run the application:**
+    ```bash
+    ng serve
+    ```
+    The frontend should be accessible on `http://localhost:4200` (default Angular port).
+
+#### Running Tests
+*   **Backend Tests:**
+    ```bash
+    mvn test
+    ```
+*   **Frontend Tests:**
+    ```bash
+    ng test
+    ```
+
+### 🗺️ Roadmap
+*   **Frontend Development:** Complete the Angular 21 application integration with the backend API.
+*   **Advanced Analytics:** Implement more sophisticated user productivity statistics and visualizations.
+*   **Notifications:** Add real-time notifications for upcoming deadlines or overdue tasks.
+*   **User Customization:** Allow users to customize priority calculation parameters.
+*   **Mobile Application:** Develop native mobile applications for iOS and Android.
+
+### 📧 Contact
+For any questions or collaborations, feel free to reach out:
+*   **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
+*   **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
+
 ---
 
 ## 🇵🇱 Wersja Polska
+
+### 📖 Spis Treści
+- [🚀 O Projekcie](#-o-projekcie)
+- [🏗️ Architektura i Główne Moduły](#️-architektura-i-główne-moduły)
+- [🧠 Algorytm Intelligence](#-algorytm-intelligence)
+- [🌐 Możliwości API](#-możliwości-api)
+- [🎨 Stan Frontendu](#-stan-frontendu)
+- [🛠️ Instalacja i Uruchomienie](#️-instalacja-i-uruchomienie)
+- [🗺️ Plan Rozwoju](#️-plan-rozwoju)
+- [📧 Kontakt](#-kontakt-1)
 
 ### 🚀 O Projekcie
 **TaskIntelligence** to nowoczesna, algorytmiczna platforma produktywności, zaprojektowana by eliminować obciążenie decyzyjne z naszej codzienności. Projekt wykracza poza ramy zwykłych list "to-do", wprowadzając autorski **Silnik Intelligence**, który automatycznie bada i szereguje priorytety zadań w czasie rzeczywistym. Architektura wykorzystuje najnowsze standardy w branży (**Java 25**, **Spring Boot 4**, **Angular 21**), stawiając na wydajność, bezpieczeństwo i skalowalność gotową na rozwiązania typu Enterprise.
 
 ### 🏗️ Architektura i Główne Moduły
 Backend został rygorystycznie zaprojektowany z myślą o czystym kodzie i podziale odpowiedzialności (Separation of Concerns):
-- 🛡️ **Bezpieczeństwo (Auth):** Solidna, bezstanowa autoryzacja oparta na tokenach JWT (`JJWT 0.12`), autorski `JwtFilter` oraz polityka przypisywania ról.
+- 🛡️ **Bezpieczeństwo (Auth):** Solidna autoryzacja (`JJWT 0.12`) wymuszająca politykę `STATELESS` powiązaną z `BCryptPasswordEncoder`, autorski `JwtFilter` oraz natywan kontrola dostępu typu RBAC.
 - 🧠 **Silnik SmartTask:** Algorytmiczne serce systemu bezustannie oceniające pilność każdego wpisu.
-- ⏱️ **Harmonogram (Scheduler):** Zautomatyzowane procesy tła (`@Scheduled`), które co godzinę masowo odświeżają punktację w bazie danych.
+- ⏱️ **Harmonogram (Scheduler):** Zautomatyzowane procesy tła (`@Scheduled`), zoptymalizowane do pomijania ukończonych zadań (`COMPLETED`) już na etapie zapytania do bazy, drastycznie zwiększając wydajność i redukując obciążenie przy dużej skali.
 - 🧯 **Globalna Obsługa Błędów:** Scentralizowany kontroler przechwytujący i mapujący logikę wyjątków do jednorodnych odpowiedzi HTTP (`@ControllerAdvice`).
 - 💾 **Warstwa Danych:** Bezpieczny przepływ danych ze wzorcem `DTO` we współpracy z silnikiem ORM w technologii `Hibernate` oraz `PostgreSQL`.
+- ⚙️ **Infrastruktura i Narzędzia:** Zautomatyzowane migracje schematów bazy danych oraz wgrywanie danych autorskich (dummy data) przez **Flyway**, elastyczne mapowanie DTO z **MapStruct** i czysty kod dzięki bibliotece **Lombok**, wspierane odpowiednimi profilami wdrożeniowymi (dev/prod).
 
 ### 🧠 Algorytm Intelligence
 Logika `TaskPriorityService` eliminuje zgadywanie, kalkulując nieustannie Wskaźnik Pilności ($S$) ze wzoru:
@@ -76,15 +183,99 @@ $$S = \frac{Ważność \times 10}{\max(1, DniDoDeadline)}$$
 * **Archiwizacja:** Zamknięcie zadania (status "Completed") zeruje wynik ($0$), trwale zdejmując je z listy aktywnych wyzwań.
 
 ### 🌐 Możliwości API
-Całość architektury jest dostępna i interaktywna dla programistów dzięki wdrożeniu systemu **Springdoc OpenAPI 3.1** (Swagger UI):
+Całość architektury jest dostępna i interaktywna dla programistów dzięki wdrożeniu systemu **Springdoc OpenAPI 3.1** (Swagger UI z globalnie wdrożoną autoryzacją **BearerAuth** pozwalającą na szybkie testy bez ciągłego odświeżania tokena pod każdym punktem końcowym):
+
+**🔐 Autoryzacja i Bezpieczeństwo**
 * `POST /api/auth/register` - Rejestracja z bezpiecznym haszowaniem haseł i przypisywaniem modeli.
-* `POST /api/auth/login` - Klasyczne uwierzytelnianie na podstawie danych do logowania wydające tokeny autoryzacyjne w paradygmacie JWT.
-* `GET /api/tasks/smart` - Serce aplikacji zaciągające listę inteligentnie posortowanych zadań według $S$.
-* `PATCH /api/tasks/{id}/status` - Skondensowane, szybkie metody do zmiany aktualnych etapów zadań bez wysyłania pełnych paczek danych.
+* `POST /api/auth/login` - Klasyczne uwierzytelnianie wydające tokeny dostępowe oraz odświeżające (Refresh Token) w paradygmacie JWT.
+* `POST /api/auth/refresh` - Bezszwowe odświeżanie tokenów dostępu.
+* `POST /api/auth/logout` - Bezpieczne unieważnianie sesji i tokenów w bazie danych.
+
+**📋 Zarządzanie Zadaniami (CRUD)**
+* `GET / POST / PUT / DELETE /api/tasks` - Pełny cykl życia zadań ze wsparciem paginacji (`/api/tasks/page`).
+* `PATCH /api/tasks/{id}/updateStatus` - Skondensowane, szybkie metody do zmiany aktualnych etapów zadań bez wysyłania pełnych paczek danych.
+
+**🧠 Silnik Inteligentny i Analityka**
+* `GET /api/tasks/smart/getAllSmartTasks` - Serce aplikacji zaciągające listę inteligentnie posortowanych zadań według $S$ (z obsługą stronicowania).
+* `GET /api/tasks/smart/suggestions` - System inteligentnych sugestii zadań do wykonania.
+* `POST /api/tasks/stats` - Generowanie i pobieranie zaawansowanych statystyk produktywności użytkownika.
+
+**🛡️ Administracja**
+* `GET /api/admin/test` - Testowe zabezpieczone endpointy wymagające ról administracyjnych (RBAC).
 
 ### 🎨 Stan Frontendu
 > [!NOTE]
 > Moduł kliencki oparty na technologii Angular 21 znajduje się we wczesnej fazie szkieletu (`boilerplate`). Fundamenty pod nowoczesny interfejs graficzny wspierany zaawansowanymi klasami `.css` z ekosystemu `Tailwind CSS` są właśnie mapowane na wyjścia backendowego API.
+
+### 🛠️ Instalacja i Uruchomienie
+
+Aby uruchomić ten projekt na swojej lokalnej maszynie, wykonaj następujące kroki:
+
+#### Wymagania wstępne
+*   **Java**: Wersja 25 (lub kompatybilny JDK)
+*   **Maven**: Najnowsza stabilna wersja
+*   **Node.js & npm**: Najnowsza stabilna wersja
+*   **PostgreSQL**: Serwer bazy danych
+
+#### Konfiguracja Backendu
+1.  **Sklonuj repozytorium:**
+    ```bash
+    git clone https://github.com/your-username/TaskIntelligence.git
+    cd TaskIntelligence/backend
+    ```
+2.  **Skonfiguruj Bazę Danych:**
+    *   Utwórz bazę danych PostgreSQL (np. `taskintelligence_db`).
+    *   Zaktualizuj `src/main/resources/application.yml` (lub `application-dev.yml`) swoimi danymi dostępowymi do bazy:
+        ```yaml
+        spring:
+          datasource:
+            url: jdbc:postgresql://localhost:5432/taskintelligence_db
+            username: your_db_username
+            password: your_db_password
+        ```
+3.  **Zbuduj i Uruchom:**
+    ```bash
+    mvn clean install
+    mvn spring-boot:run
+    ```
+    Backend powinien uruchomić się na `http://localhost:8080`.
+
+#### Konfiguracja Frontendu (WIP)
+1.  **Przejdź do katalogu frontendu:**
+    ```bash
+    cd ../frontend # Zakładając, że frontend jest w katalogu równorzędnym
+    ```
+2.  **Zainstaluj zależności:**
+    ```bash
+    npm install
+    ```
+3.  **Uruchom aplikację:**
+    ```bash
+    ng serve
+    ```
+    Frontend powinien być dostępny pod adresem `http://localhost:4200` (domyślny port Angulara).
+
+#### Uruchamianie Testów
+*   **Testy Backendu:**
+    ```bash
+    mvn test
+    ```
+*   **Testy Frontendu:**
+    ```bash
+    ng test
+    ```
+
+### 🗺️ Plan Rozwoju
+*   **Rozwój Frontendu:** Ukończenie integracji aplikacji Angular 21 z API backendu.
+*   **Zaawansowana Analityka:** Wdrożenie bardziej zaawansowanych statystyk produktywności użytkownika i wizualizacji.
+*   **Powiadomienia:** Dodanie powiadomień w czasie rzeczywistym o nadchodzących terminach lub zaległych zadaniach.
+*   **Personalizacja Użytkownika:** Umożliwienie użytkownikom dostosowywania parametrów obliczania priorytetów.
+*   **Aplikacja Mobilna:** Opracowanie natywnych aplikacji mobilnych dla systemów iOS i Android.
+
+### 📧 Kontakt
+W przypadku pytań lub chęci współpracy, skontaktuj się:
+*   **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
+*   **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
 
 ---
 
@@ -93,7 +284,7 @@ Całość architektury jest dostępna i interaktywna dla programistów dzięki w
 | Component | Technology |
 | :--- | :--- |
 | **Backend Core** | Java 25, Spring Boot 4.0.3 |
-| **Data Layer** | PostgreSQL, Hibernate ORM, DTO Mappers |
+| **Data Layer** | PostgreSQL, Hibernate ORM, Flyway Migrations, MapStruct |
 | **Frontend Core** | Angular 21.2.2 (WIP), Tailwind CSS |
 | **Security** | Spring Security + JJWT 0.12 (Stateless JWT) |
 | **API Docs** | Springdoc OpenAPI 3.1 (Swagger UI) |
