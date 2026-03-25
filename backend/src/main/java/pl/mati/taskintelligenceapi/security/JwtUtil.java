@@ -52,7 +52,7 @@ public class JwtUtil {
         try{
             if(extractUsername(token).equals(username)) return true;
         }catch (JwtException e){
-            return false;
+            throw e;
         }
         return false;
     }

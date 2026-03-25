@@ -36,9 +36,9 @@ public class Task {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @Schema(description = "Date and time when the task is due", example = "2026-03-24 12:30")
+    @Schema(description = "Date and time when the task is due", example = "2026-03-24 12:30:00")
     @Column(nullable = false)
-    private LocalDateTime deadlineTo;
+    private LocalDateTime deadline;
 
     @Schema(description = "User who created the task")
     @ManyToOne

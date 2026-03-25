@@ -16,7 +16,7 @@ CREATE TABLE tasks (
     title VARCHAR(100) NOT NULL,
     description VARCHAR(255),
     created_at TIMESTAMP,
-    deadline_to TIMESTAMP NOT NULL,
+    deadline TIMESTAMP NOT NULL,
     user_id BIGINT,
     importance INTEGER NOT NULL,
     task_status VARCHAR(50),

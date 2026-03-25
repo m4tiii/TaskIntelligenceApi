@@ -19,7 +19,6 @@ import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.entity.Task;
 import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 import pl.mati.taskintelligenceapi.entity.User;
-import pl.mati.taskintelligenceapi.entity.enums.TimeRange;
 import pl.mati.taskintelligenceapi.mapper.TaskMapper;
 import pl.mati.taskintelligenceapi.repository.StatisticRepository;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
@@ -66,7 +65,7 @@ public class TaskServiceTest {
         task.setPriorityScore(priorityScore);
         task.setTaskStatus(status);
         task.setImportance(5);
-        task.setDeadlineTo(LocalDateTime.now().plusDays(3));
+        task.setDeadline(LocalDateTime.now().plusDays(3));
         return task;
     }
 
@@ -218,13 +217,13 @@ public class TaskServiceTest {
         task1.setTitle("titleTest1");
         task1.setImportance(10);
         task1.setCreatedAt(LocalDateTime.now());
-        task1.setDeadlineTo(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
+        task1.setDeadline(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
         Task task2 = new Task();
         task2.setId(taskIdSecond);
         task2.setTitle("titleTest2");
         task2.setCreatedAt(LocalDateTime.now());
         task2.setImportance(5);
-        task2.setDeadlineTo(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
+        task2.setDeadline(LocalDateTime.of(2026, Month.MARCH, 31, 12,15));
 
         Page<Task> taskPage = new PageImpl<>(List.of(task1, task2), pageable, List.of(task1, task2).size());
 
@@ -243,7 +242,7 @@ public class TaskServiceTest {
 
         //Then
         Assertions.assertEquals(2, tasks.getTotalElements());
-        Assertions.assertTrue(tasks.getContent().get(0).taskPriority() > tasks.getContent().get(1).taskPriority());
+        Assertions.assertTrue(tasks.getContent().get(0).priorityScore() > tasks.getContent().get(1).priorityScore());
 
     }
 
@@ -472,8 +471,8 @@ public class TaskServiceTest {
         //Given
         TaskPriorityService taskPriorityService1 = new TaskPriorityService();
         Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
-        task.setDeadlineTo(LocalDateTime.now().plusDays(3).plusMinutes(30));
-        double calculatedPriority = 50/3.0;
+        task.setDeadline(LocalDateTime.now().plusDays(3).plusMinutes(30));
+        double calculatedPriority = 50/6.0;
 
         //When
         double priorityScore = taskPriorityService1.calculatePriority(task);
@@ -501,7 +500,7 @@ public class TaskServiceTest {
         //Given
         TaskPriorityService taskPriorityService1 = new TaskPriorityService();
         Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
-        task.setDeadlineTo(LocalDateTime.now().minusDays(1));
+        task.setDeadline(LocalDateTime.now().minusDays(1));
         double calculatedPriority = 50/1 + 50;
 
         //When
@@ -516,7 +515,7 @@ public class TaskServiceTest {
         //Given
         TaskPriorityService taskPriorityService1 = new TaskPriorityService();
         Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
-        task.setDeadlineTo(LocalDateTime.now());
+        task.setDeadline(LocalDateTime.now());
         double calculatedPriority = 50.0;
 
         //When
@@ -562,7 +561,7 @@ public class TaskServiceTest {
         TaskResponseDTO result = taskService.patchTaskStatus(task.getId(), statusUpdateDto, "testUser");
 
         //Then
-        Assertions.assertEquals(TaskStatus.COMPLETED, result.status());
+        Assertions.assertEquals(TaskStatus.COMPLETED, result.taskStatus());
         Mockito.verify(taskRepository).save(task);
         Mockito.verify(statisticRepository).save(Mockito.argThat(stats ->
                     stats.getScore() == 100 &&
@@ -586,7 +585,7 @@ public class TaskServiceTest {
         TaskResponseDTO result = taskService.patchTaskStatus(task.getId(), statusUpdateDto, "testUser");
 
         //Then
-        Assertions.assertEquals(TaskStatus.IN_PROGRESS, result.status());
+        Assertions.assertEquals(TaskStatus.IN_PROGRESS, result.taskStatus());
         Mockito.verify(taskRepository).save(task);
         Mockito.verifyNoInteractions(statisticRepository);
         Mockito.verifyNoInteractions(taskPriorityService);

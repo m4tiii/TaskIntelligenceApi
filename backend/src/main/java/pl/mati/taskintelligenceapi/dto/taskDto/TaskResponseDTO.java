@@ -11,7 +11,7 @@ public record TaskResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime deadline,
         int importance,
-        TaskStatus status,
-        double taskPriority
+        TaskStatus taskStatus,
+        double priorityScore
 ) {
 }

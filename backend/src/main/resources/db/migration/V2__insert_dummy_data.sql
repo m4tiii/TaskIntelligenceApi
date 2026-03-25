@@ -11,12 +11,12 @@ VALUES (
        ) ON CONFLICT (username) DO NOTHING;
 
 -- Generujemy równe 10 000 zadań przypisanych do Ciebie
-INSERT INTO tasks (title, description, created_at, deadline_to, importance, task_status, priority_score, user_id)
+INSERT INTO tasks (title, description, created_at, deadline, importance, task_status, priority_score, user_id)
 SELECT 
     'Masowe Zadanie Testowe ' || i,
     'Zadanie wygenerowane na poczet testów wydajnościowych API dla użytkownika. Numer zadania: ' || i,
-    CURRENT_TIMESTAMP - (random() * 30 || ' days')::interval,
-    CURRENT_TIMESTAMP + (random() * 30 || ' days')::interval,
+    TIMESTAMP '2026-03-01 00:00:00' + random() * (TIMESTAMP '2026-03-25 23:59:59' - TIMESTAMP '2026-03-01 00:00:00'),
+    TIMESTAMP '2026-05-01 00:00:00' + random() * (TIMESTAMP '2026-05-30 23:59:59' - TIMESTAMP '2026-05-01 00:00:00'),
     floor(random() * 10 + 1)::INT,
     CASE 
         WHEN random() < 0.50 THEN 'COMPLETED' 

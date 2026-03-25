@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.mati.taskintelligenceapi.dto.RestResponse;
 import pl.mati.taskintelligenceapi.dto.taskDto.StatusUpdateDto;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskRequestDTO;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
@@ -35,8 +36,9 @@ public class TaskController {
     })
     @Operation(summary = "Get task by ID", description = "Retrieves a specific task by its ID and authenticated user.")
     @GetMapping("/{requestedId}")
-    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long requestedId, Principal principal) {
-        return ResponseEntity.ok(taskService.getTaskById(requestedId, principal.getName()));
+    public ResponseEntity<RestResponse<TaskResponseDTO>> getTaskById(@PathVariable Long requestedId, Principal principal) {
+        TaskResponseDTO taskResponseDTO = taskService.getTaskById(requestedId, principal.getName());
+        return ResponseEntity.ok(RestResponse.success(taskResponseDTO));
     }
 
     @ApiResponses(value = {
@@ -45,8 +47,9 @@ public class TaskController {
     })
     @Operation(summary = "Get all tasks", description = "Retrieves all tasks for the authenticated user.")
     @GetMapping
-    public ResponseEntity<List<TaskResponseDTO>> getAllTasks(Principal principal){
-        return ResponseEntity.ok(taskService.getAllTasksByUserUsername(principal.getName()));
+    public ResponseEntity<RestResponse<List<TaskResponseDTO>>> getAllTasks(Principal principal){
+        List<TaskResponseDTO> tasks = taskService.getAllTasksByUserUsername(principal.getName());
+        return ResponseEntity.ok(RestResponse.success(tasks));
     }
 
     @ApiResponses(value ={
@@ -55,8 +58,9 @@ public class TaskController {
     })
     @Operation(summary = "Get page of tasks", description = "Retrieves a page of tasks for the authenticated user.")
     @GetMapping("/page")
-    public ResponseEntity<Page<TaskResponseDTO>> getPageOfTasks(Pageable pageable, Principal principal){
-        return ResponseEntity.ok(taskService.getPageOfTasks(pageable, principal.getName()));
+    public ResponseEntity<RestResponse<Page<TaskResponseDTO>>> getPageOfTasks(Pageable pageable, Principal principal){
+        Page<TaskResponseDTO> taskPage = taskService.getPageOfTasks(pageable, principal.getName());
+        return ResponseEntity.ok(RestResponse.success(taskPage));
     }
 
     @ApiResponses(value = {
@@ -66,7 +70,7 @@ public class TaskController {
     })
     @Operation(summary = "Save task", description = "Saves a new task for the authenticated user.")
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> saveTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO,
+    public ResponseEntity<RestResponse<TaskResponseDTO>> saveTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO,
                                                     Principal principal
     ) {
         TaskResponseDTO savedTask = taskService.createTask(taskRequestDTO, principal.getName());
@@ -77,7 +81,7 @@ public class TaskController {
                 .buildAndExpand(savedTask.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(savedTask);
+        return ResponseEntity.created(location).body(RestResponse.success(savedTask));
     }
 
 
@@ -90,11 +94,12 @@ public class TaskController {
     })
     @Operation(summary = "Update task", description = "Updates an existing task for the authenticated user.")
     @PutMapping("/{requestedId}")
-    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long requestedId,
+    public ResponseEntity<RestResponse<TaskResponseDTO>> updateTask(@PathVariable Long requestedId,
                                                       @Valid @RequestBody TaskRequestDTO taskRequestDTO,
                                                       Principal principal
     ){
-        return ResponseEntity.ok(taskService.updateTask(requestedId, taskRequestDTO, principal.getName()));
+        TaskResponseDTO updatedTask = taskService.updateTask(requestedId, taskRequestDTO, principal.getName());
+        return ResponseEntity.ok(RestResponse.success(updatedTask));
     }
 
 
@@ -105,9 +110,9 @@ public class TaskController {
     })
     @Operation(summary = "Delete task", description = "Deletes an existing task for the authenticated user.")
     @DeleteMapping("/{requestedId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long requestedId, Principal principal){
+    public ResponseEntity<RestResponse<Void>> deleteTask(@PathVariable Long requestedId, Principal principal){
         taskService.deleteTask(requestedId, principal.getName());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(RestResponse.success(null));
     }
 
     @ApiResponses(value = {
@@ -117,7 +122,8 @@ public class TaskController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PatchMapping("/{requestedId}/updateStatus")
-    public ResponseEntity<TaskResponseDTO> updateTaskStatus(@PathVariable Long requestedId, @Valid @RequestBody StatusUpdateDto status, Principal principal){
-        return ResponseEntity.ok(taskService.patchTaskStatus(requestedId, status, principal.getName()));
+    public ResponseEntity<RestResponse<TaskResponseDTO>> updateTaskStatus(@PathVariable Long requestedId, @Valid @RequestBody StatusUpdateDto status, Principal principal){
+        TaskResponseDTO updatedTask = taskService.patchTaskStatus(requestedId, status, principal.getName());
+        return ResponseEntity.ok(RestResponse.success(updatedTask));
     }
 }

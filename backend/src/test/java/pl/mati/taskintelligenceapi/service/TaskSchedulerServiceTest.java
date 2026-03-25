@@ -30,7 +30,7 @@ public class TaskSchedulerServiceTest {
         task.setId(id);
         task.setTaskStatus(status);
         task.setImportance(5);
-        task.setDeadlineTo(LocalDateTime.now().plusDays(3));
+        task.setDeadline(LocalDateTime.now().plusDays(3));
         task.setPriorityScore(0.0);
         return task;
     }

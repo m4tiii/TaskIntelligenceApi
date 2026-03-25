@@ -7,10 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.mati.taskintelligenceapi.dto.RestResponse;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthRegisterRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthResponseDTO;
@@ -23,21 +21,23 @@ import java.security.Principal;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Endpoints for user registration and authentication")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final AuthService authService;
 
     @Operation(summary = "Register user", description = "Registers a new user.",  security = {})
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody AuthRegisterRequestDTO authRequestDTO){
-
-        return ResponseEntity.ok(authService.registrerUser(authRequestDTO));
+    public ResponseEntity<RestResponse<?>> registerUser(@RequestBody AuthRegisterRequestDTO authRequestDTO){
+        AuthResponseDTO authResponseDTO = authService.registrerUser(authRequestDTO);
+        return ResponseEntity.ok(RestResponse.success(authResponseDTO));
     }
 
     @Operation(summary = "Login user", description = "Logs in an existing user.", security = {})
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO){
-        return ResponseEntity.ok(authService.login(authRequestDTO));
+    public ResponseEntity<RestResponse<AuthResponseDTO>> login(@RequestBody AuthRequestDTO authRequestDTO){
+        AuthResponseDTO authResponseDTO = authService.login(authRequestDTO);
+        return ResponseEntity.ok(RestResponse.success(authResponseDTO));
     }
 
     @Operation(summary = "Logout user", description = "Invalidates the refresh token by removing it from database")
@@ -47,16 +47,17 @@ public class AuthController {
     })
     @PostMapping("/logout")
     @Transactional
-    public ResponseEntity<Void> logout(Principal principal){
+    public ResponseEntity<RestResponse<Void>> logout(Principal principal){
         authService.logout(principal);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(RestResponse.success(null));
     }
 
     @Operation(summary = "Refresh token", description = "Refreshes the access token.")
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponseDTO> refresh(@RequestBody RefreshTokenRequestDTO refreshToken){
+    public ResponseEntity<RestResponse<AuthResponseDTO>> refresh(@RequestBody RefreshTokenRequestDTO refreshToken){
 
-        return ResponseEntity.ok(authService.refresh(refreshToken));
+        AuthResponseDTO authResponseDTO = authService.refresh(refreshToken);
+        return ResponseEntity.ok(RestResponse.success(authResponseDTO));
     }
 
 }

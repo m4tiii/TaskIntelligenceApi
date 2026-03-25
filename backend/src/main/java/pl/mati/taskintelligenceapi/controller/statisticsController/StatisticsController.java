@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.mati.taskintelligenceapi.dto.RestResponse;
 import pl.mati.taskintelligenceapi.dto.statisticsDto.StatisticsResponseDTO;
 import pl.mati.taskintelligenceapi.dto.statisticsDto.StatsRequestDTO;
 import pl.mati.taskintelligenceapi.service.statisticsService.StatisticsService;
@@ -25,7 +26,8 @@ public class StatisticsController {
 
     @Operation(summary = "Get statistics", description = "Retrieves statistics for the authenticated user.")
     @PostMapping
-    public ResponseEntity<List<StatisticsResponseDTO>> getStats(@RequestBody StatsRequestDTO statsRequestDTO, Principal principal){
-        return ResponseEntity.ok(statisticsService.getStats(statsRequestDTO, principal.getName()));
+    public ResponseEntity<RestResponse<List<StatisticsResponseDTO>>> getStats(@RequestBody StatsRequestDTO statsRequestDTO, Principal principal){
+        List<StatisticsResponseDTO> statisticsResponseDTOList = statisticsService.getStats(statsRequestDTO, principal.getName());
+        return ResponseEntity.ok(RestResponse.success(statisticsResponseDTOList));
     }
 }

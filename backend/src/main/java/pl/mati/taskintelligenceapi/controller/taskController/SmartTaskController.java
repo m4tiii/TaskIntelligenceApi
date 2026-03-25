@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.mati.taskintelligenceapi.dto.RestResponse;
 import pl.mati.taskintelligenceapi.dto.taskDto.TaskResponseDTO;
 import pl.mati.taskintelligenceapi.service.taskService.SmartTaskService;
 
@@ -33,12 +34,14 @@ public class SmartTaskController {
     })
     @Operation(summary = "Get all smart tasks", description = "Retrieves all smart tasks for the authenticated user.")
     @GetMapping("/getAllSmartTasks")
-    public ResponseEntity<Page<TaskResponseDTO>> getAllSmartTasks(Principal principal, Pageable pageable){
-        return ResponseEntity.ok(smartTaskService.getSmartTaskList(principal.getName(), pageable));
+    public ResponseEntity<RestResponse<Page<TaskResponseDTO>>> getAllSmartTasks(Principal principal, Pageable pageable){
+        Page<TaskResponseDTO> taskPage = smartTaskService.getSmartTaskList(principal.getName(), pageable);
+        return ResponseEntity.ok(RestResponse.success(taskPage));
     }
 
     @GetMapping("/suggestions")
-    public ResponseEntity<List<TaskResponseDTO>> getSuggestions(Principal principal){
-        return ResponseEntity.ok(smartTaskService.getSuggestions(principal));
+    public ResponseEntity<RestResponse<List<TaskResponseDTO>>> getSuggestions(Principal principal){
+        List<TaskResponseDTO> suggestions = smartTaskService.getSuggestions(principal);
+        return ResponseEntity.ok(RestResponse.success(suggestions));
     }
 }

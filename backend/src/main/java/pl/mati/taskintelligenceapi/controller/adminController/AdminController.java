@@ -4,12 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.mati.taskintelligenceapi.dto.RestResponse;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
     @GetMapping("/test")
-    public ResponseEntity<String> testAdmin() {
-        return ResponseEntity.ok("Admin endpoint is working!");
+    public ResponseEntity<RestResponse<String>> testAdmin() {
+        return ResponseEntity.ok(RestResponse.success("Admin endpoint is working!"));
     }
 }

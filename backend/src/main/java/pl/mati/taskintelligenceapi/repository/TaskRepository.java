@@ -27,6 +27,6 @@ public interface TaskRepository extends JpaRepository<Task, Long>
     Page<Task> findAllByUserUsername(Pageable pageable, String name);
 
     @EntityGraph(attributePaths = {"user"})
-    @Query("SELECT t FROM Task t WHERE t.user.username = ?1 AND t.priorityScore > ?2 ORDER BY t.priorityScore DESC")
+    @Query("SELECT t FROM Task t WHERE t.user.username = ?1 ORDER BY t.priorityScore DESC LIMIT 10")
     List<Task> findAllByUserUsernameAndPriorityScoreGreaterThanSorted(String name, int score);
 }

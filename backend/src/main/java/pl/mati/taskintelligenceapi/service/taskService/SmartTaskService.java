@@ -37,7 +37,7 @@ public class SmartTaskService {
                     taskResponseDTO.createdAt(),
                     taskResponseDTO.deadline(),
                     taskResponseDTO.importance(),
-                    taskResponseDTO.status(),
+                    taskResponseDTO.taskStatus(),
                     taskPriorityCalc
             );
         });

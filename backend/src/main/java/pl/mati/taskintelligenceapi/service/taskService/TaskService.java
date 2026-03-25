@@ -52,6 +52,7 @@ public class TaskService {
         Task task = taskMapper.toTask(taskRequestDTO);
         task.setUser(user);
         task.setTaskStatus(TaskStatus.NEW);
+        task.setDeadline(taskRequestDTO.deadline());
         task.setPriorityScore(taskPriorityService.calculatePriority(task));
         return taskMapper.toDto(taskRepository.save(task));
     }
@@ -64,9 +65,9 @@ public class TaskService {
                 ));
         task.setTitle(taskRequestDTO.title());
         task.setDescription(taskRequestDTO.description());
-        task.setTaskStatus(taskRequestDTO.status());
+        task.setTaskStatus(taskRequestDTO.taskStatus());
         task.setImportance(taskRequestDTO.importance());
-        task.setDeadlineTo(taskRequestDTO.deadline());
+        task.setDeadline(taskRequestDTO.deadline());
         task.setPriorityScore(taskPriorityService.calculatePriority(task));
         return taskMapper.toDto(task);
     }
@@ -91,7 +92,7 @@ public class TaskService {
         Task task = taskRepository.findByIdAndUserUsername(requestedId, username)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id: " + requestedId + " not found!"));
 
-        task.setTaskStatus(taskStatus.status().equals(TaskStatus.COMPLETED) ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS);
+        task.setTaskStatus(taskStatus.status().equals(TaskStatus.COMPLETED.name()) ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS);
         taskRepository.save(task);
 
         if (taskStatus.status().equals("COMPLETED")) {

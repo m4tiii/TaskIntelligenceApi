@@ -12,12 +12,12 @@ public record TaskRequestDTO(
         String title,
         @Size(max = 255, message = "Description cannot be longer than 255 characters")
         String description,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         @Future
         @NotNull
         LocalDateTime deadline,
         @Max(10) @Min(1)
         int importance,
-        TaskStatus status
+        TaskStatus taskStatus
 ) {
 }
