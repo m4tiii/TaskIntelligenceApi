@@ -21,7 +21,6 @@ import java.security.Principal;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Endpoints for user registration and authentication")
-@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final AuthService authService;
@@ -29,7 +28,7 @@ public class AuthController {
     @Operation(summary = "Register user", description = "Registers a new user.",  security = {})
     @PostMapping("/register")
     public ResponseEntity<RestResponse<?>> registerUser(@RequestBody AuthRegisterRequestDTO authRequestDTO){
-        AuthResponseDTO authResponseDTO = authService.registrerUser(authRequestDTO);
+        AuthResponseDTO authResponseDTO = authService.registerUser(authRequestDTO);
         return ResponseEntity.ok(RestResponse.success(authResponseDTO));
     }
 

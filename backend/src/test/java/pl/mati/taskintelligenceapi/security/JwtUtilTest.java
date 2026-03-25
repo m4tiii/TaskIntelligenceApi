@@ -1,10 +1,12 @@
 package pl.mati.taskintelligenceapi.security;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+@RequiredArgsConstructor
 public class JwtUtilTest {
-    JwtUtil jwtUtil = new JwtUtil();
+    JwtUtil jwtUtil = new JwtUtil("moj-super-tajny-klucz-minimum-32-znaki");
 
     @Test
     void shouldGenerateTokenAndExtreactUsername(){

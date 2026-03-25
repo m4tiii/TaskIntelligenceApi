@@ -11,17 +11,17 @@ import java.time.temporal.ChronoUnit;
 @Slf4j
 @Service
 public class TaskPriorityService {
-    public double calculatePriority(Task task){
+    public double calculatePriorityScore(Task task){
         if(task.getTaskStatus() == TaskStatus.COMPLETED) return task.getPriorityScore();
 
-        long daysToDeadLine = (ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadline()));
-        daysToDeadLine /= 12;
-        log.info(String.valueOf(daysToDeadLine));
-        long factor = Math.max(1, daysToDeadLine);
+        long halfDaysToDeadLine = (ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadline()));
+        halfDaysToDeadLine /= 12;
+        log.info(String.valueOf(halfDaysToDeadLine));
+        long factor = Math.max(1, halfDaysToDeadLine);
         log.info(String.valueOf(factor));
         double score = (task.getImportance() * 10.0) / factor;
         log.info(String.valueOf(score));
-        if(daysToDeadLine < 0){
+        if(halfDaysToDeadLine < 0){
             score += 50;
             log.info("+50");
         }
@@ -29,7 +29,7 @@ public class TaskPriorityService {
         return score;
     }
 
-    public int calculateScore(Task task) {
+    public int calculateScoreOfCompletedTask(Task task) {
         double daysToDeadLine = ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadline())/24.0;
         return  (int) ((task.getImportance() * 10) + (daysToDeadLine * 5));
     }

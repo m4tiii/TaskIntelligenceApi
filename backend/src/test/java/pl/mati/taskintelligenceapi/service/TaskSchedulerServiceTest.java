@@ -42,8 +42,8 @@ public class TaskSchedulerServiceTest {
         Task task2 = buildTask(2L, TaskStatus.IN_PROGRESS);
 
         Mockito.when(taskRepository.findAllByTaskStatusNot(TaskStatus.COMPLETED)).thenReturn(List.of(task1, task2));
-        Mockito.when(taskPriorityService.calculatePriority(task1)).thenReturn(7.5);
-        Mockito.when(taskPriorityService.calculatePriority(task2)).thenReturn(8.0);
+        Mockito.when(taskPriorityService.calculatePriorityScore(task1)).thenReturn(7.5);
+        Mockito.when(taskPriorityService.calculatePriorityScore(task2)).thenReturn(8.0);
 
         //When
         taskSchedulerService.updateAllPriorities();
@@ -52,8 +52,8 @@ public class TaskSchedulerServiceTest {
         Assertions.assertEquals(7.5, task1.getPriorityScore());
         Assertions.assertEquals(8.0, task2.getPriorityScore());
         Mockito.verify(taskRepository).saveAll(List.of(task1, task2));
-        Mockito.verify(taskPriorityService).calculatePriority(task1);
-        Mockito.verify(taskPriorityService).calculatePriority(task2);
+        Mockito.verify(taskPriorityService).calculatePriorityScore(task1);
+        Mockito.verify(taskPriorityService).calculatePriorityScore(task2);
     }
 
     @Test
@@ -81,8 +81,8 @@ public class TaskSchedulerServiceTest {
         taskSchedulerService.updateAllPriorities();
 
         //Then
-        Mockito.verify(taskPriorityService, Mockito.times(1)).calculatePriority(task1);
-        Mockito.verify(taskPriorityService, Mockito.times(1)).calculatePriority(task2);
+        Mockito.verify(taskPriorityService, Mockito.times(1)).calculatePriorityScore(task1);
+        Mockito.verify(taskPriorityService, Mockito.times(1)).calculatePriorityScore(task2);
         Mockito.verifyNoMoreInteractions(taskPriorityService);
     }
 }

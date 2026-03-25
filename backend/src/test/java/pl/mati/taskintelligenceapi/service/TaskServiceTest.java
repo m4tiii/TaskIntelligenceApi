@@ -228,8 +228,6 @@ public class TaskServiceTest {
         Page<Task> taskPage = new PageImpl<>(List.of(task1, task2), pageable, List.of(task1, task2).size());
 
         Mockito.when(taskRepository.findAllByUserUsername(pageable, username)).thenReturn(taskPage);
-        Mockito.when(taskPriorityService.calculatePriority(task1)).thenReturn(100.0);
-        Mockito.when(taskPriorityService.calculatePriority(task2)).thenReturn(50.0);
 
         TaskResponseDTO dto1 = new TaskResponseDTO(taskIdFirst, "titleTest1", null, null, null, 10, null, 100.0);
         TaskResponseDTO dto2 = new TaskResponseDTO(taskIdSecond, "titleTest2", null, null, null, 5, null, 50.0);
@@ -459,7 +457,7 @@ public class TaskServiceTest {
         Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.NEW);
 
         //When
-        int priorityScore = taskPriorityService1.calculateScore(task);
+        int priorityScore = taskPriorityService1.calculateScoreOfCompletedTask(task);
 
         //Then
         Assertions.assertEquals(65, priorityScore);
@@ -475,7 +473,7 @@ public class TaskServiceTest {
         double calculatedPriority = 50/6.0;
 
         //When
-        double priorityScore = taskPriorityService1.calculatePriority(task);
+        double priorityScore = taskPriorityService1.calculatePriorityScore(task);
 
         //Then
         Assertions.assertEquals(calculatedPriority, priorityScore, 0.001);
@@ -489,7 +487,7 @@ public class TaskServiceTest {
         Task task = buildTask(4L, "Priority Task", 0.0, TaskStatus.COMPLETED);
 
         //When
-        double result = taskPriorityService1.calculatePriority(task);
+        double result = taskPriorityService1.calculatePriorityScore(task);
 
         //Then
         Assertions.assertEquals(0.0, result);
@@ -504,7 +502,7 @@ public class TaskServiceTest {
         double calculatedPriority = 50/1 + 50;
 
         //When
-        double priorityScore = taskPriorityService1.calculatePriority(task);
+        double priorityScore = taskPriorityService1.calculatePriorityScore(task);
 
         //Then
         Assertions.assertEquals(calculatedPriority, priorityScore, 0.001);
@@ -519,7 +517,7 @@ public class TaskServiceTest {
         double calculatedPriority = 50.0;
 
         //When
-        double priorityScore = taskPriorityService1.calculatePriority(task);
+        double priorityScore = taskPriorityService1.calculatePriorityScore(task);
 
         //Then
         Assertions.assertEquals(calculatedPriority, priorityScore, 0.001);
@@ -535,8 +533,8 @@ public class TaskServiceTest {
         lowTask.setImportance(1);
 
         //When
-        double highTaskPrior = taskPriorityService1.calculatePriority(highTask);
-        double lowTaskPrior = taskPriorityService1.calculatePriority(lowTask);
+        double highTaskPrior = taskPriorityService1.calculatePriorityScore(highTask);
+        double lowTaskPrior = taskPriorityService1.calculatePriorityScore(lowTask);
 
         //Then
 
@@ -550,11 +548,11 @@ public class TaskServiceTest {
         User user = new User();
         user.setUsername("testUser");
         task.setUser(user);
-        StatusUpdateDto statusUpdateDto = new StatusUpdateDto("COMPLETED");
+        StatusUpdateDto statusUpdateDto = new StatusUpdateDto(TaskStatus.COMPLETED);
         TaskResponseDTO taskResponseDTO = buildTaskResponseDTO(1L, "testUser", 0.0 , TaskStatus.COMPLETED);
 
         Mockito.when(taskRepository.findByIdAndUserUsername(task.getId(), "testUser")).thenReturn(Optional.of(task));
-        Mockito.when(taskPriorityService.calculateScore(task)).thenReturn(100);
+        Mockito.when(taskPriorityService.calculateScoreOfCompletedTask(task)).thenReturn(100);
         Mockito.when(taskMapper.toDto(task)).thenReturn(taskResponseDTO);
 
         //Then
@@ -575,7 +573,7 @@ public class TaskServiceTest {
     void shouldSetInProgressStatusAndNotSaveStatistics(){
         //Given
         Task task = buildTask(1L, "testUser", 0.0 , TaskStatus.IN_PROGRESS);
-        StatusUpdateDto statusUpdateDto = new StatusUpdateDto("IN_PROGRESS");
+        StatusUpdateDto statusUpdateDto = new StatusUpdateDto(TaskStatus.IN_PROGRESS);
         TaskResponseDTO taskResponseDTO = buildTaskResponseDTO(1L, "testUser", 0.0 , TaskStatus.IN_PROGRESS);
 
         Mockito.when(taskRepository.findByIdAndUserUsername(task.getId(), "testUser")).thenReturn(Optional.of(task));
@@ -595,7 +593,7 @@ public class TaskServiceTest {
     @Test
     void shouldThrowWhenTaskNotFound(){
         //Given
-        StatusUpdateDto dto = new StatusUpdateDto("COMPLETED");
+        StatusUpdateDto dto = new StatusUpdateDto(TaskStatus.COMPLETED);
         Mockito.when(taskRepository.findByIdAndUserUsername(999L, "testUser")).thenReturn(Optional.empty());
 
         //When & Then

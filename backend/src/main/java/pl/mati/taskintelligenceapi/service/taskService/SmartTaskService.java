@@ -27,7 +27,6 @@ public class SmartTaskService {
 
 
         return taskPage.map(task -> {
-            double taskPriorityCalc = taskPriorityService.calculatePriority(task);
             TaskResponseDTO taskResponseDTO = taskMapper.toDto(task);
 
             return new TaskResponseDTO(
@@ -38,7 +37,7 @@ public class SmartTaskService {
                     taskResponseDTO.deadline(),
                     taskResponseDTO.importance(),
                     taskResponseDTO.taskStatus(),
-                    taskPriorityCalc
+                    taskResponseDTO.priorityScore()
             );
         });
     }

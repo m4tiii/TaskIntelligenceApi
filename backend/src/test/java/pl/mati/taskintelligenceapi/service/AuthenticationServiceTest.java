@@ -55,7 +55,7 @@ public class AuthenticationServiceTest {
         Mockito.when(jwtUtil.generateRefreshToken(request.username())).thenReturn("refreshToken");
 
         // When
-        AuthResponseDTO response = authService.registrerUser(request);
+        AuthResponseDTO response = authService.registerUser(request);
 
         // Then
         Assertions.assertNotNull(response);

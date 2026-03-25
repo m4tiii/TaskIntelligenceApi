@@ -3,6 +3,7 @@ package pl.mati.taskintelligenceapi.security;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -12,10 +13,12 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
-            "moj-super-tajny-klucz-minimum-32-znaki"
-            .getBytes(StandardCharsets.UTF_8)
-    );
+    private final SecretKey SECRET_KEY;
+
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
     private final Long EXPIRATION = 1000*60*15L;
     private final Long REFRESH_EXPIRATION = 1000*60*60*24*7L;
 

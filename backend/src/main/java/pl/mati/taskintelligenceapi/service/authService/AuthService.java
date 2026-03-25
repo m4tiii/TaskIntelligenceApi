@@ -83,7 +83,7 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthResponseDTO registrerUser(AuthRegisterRequestDTO authRegisterRequestDTO){
+    public AuthResponseDTO registerUser(AuthRegisterRequestDTO authRegisterRequestDTO){
         Optional<User> existingUser = userRepository.findByUsernameAndEmail(authRegisterRequestDTO.username(), authRegisterRequestDTO.email());
         if(existingUser.isPresent()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
