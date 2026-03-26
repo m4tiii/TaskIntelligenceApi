@@ -6,6 +6,7 @@
     <img src="https://img.shields.io/badge/Spring_Boot-4.0.3-green?style=for-the-badge&logo=springboot" alt="Spring Boot">
     <img src="https://img.shields.io/badge/Angular-21-red?style=for-the-badge&logo=angular" alt="Angular">
     <img src="https://img.shields.io/badge/Security-JWT-blue?style=for-the-badge&logo=jsonwebtokens" alt="Security">
+    <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker" alt="Docker">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT">
   </p>
 </div>
@@ -23,6 +24,7 @@
 ### 📖 Table of Contents
 - [🚀 Overview](#-overview)
 - [🏗️ Architecture & Core Modules](#️-architecture--core-modules)
+- [📂 Project Structure](#-project-structure)
 - [🧠 The Intelligence Algorithm](#-the-intelligence-algorithm)
 - [🌐 API Endpoints & Capabilities](#-api-endpoints--capabilities)
 - [🎨 Frontend State & Future Steps](#-frontend-state--future-steps)
@@ -41,6 +43,19 @@ The backend follows Domain-Driven Design principles with clean separation of con
 - 🧯 **Global Exception Handling:** Unified API error responses (`@ControllerAdvice`) across all controllers mapping exceptions to standardized HTTP codes.
 - 💾 **Data Layer:** Clean `DTO` pattern matching with internal Entities, driving seamless interactions with `Hibernate` and `PostgreSQL`.
 - ⚙️ **Infrastructure & Tooling:** Automated database migrations and mock data seeding via **Flyway**, boilerplate reduction and DTO mapping using **MapStruct** & **Lombok**, with environment-specific profiles (dev/prod).
+
+### 📂 Project Structure
+```text
+TaskIntelligence/
+├── backend/                  # Spring Boot 4.0.3 API
+│   ├── src/main/java/...     # Core Java source code
+│   ├── src/main/resources/   # Application configs & Flyway migrations
+│   └── Dockerfile            # Backend container configuration
+├── frontend/                 # Angular 21 Application (WIP)
+│   ├── src/                  # Components, services, and styles
+│   └── Dockerfile            # Frontend container configuration
+└── compose.yaml              # Multi-container orchestration (DB, API, Web)
+```
 
 ### 🧠 The Intelligence Algorithm
 The system replaces guesswork with a precise mathematical model implemented in `TaskPriorityService`. The Urgency Score ($S$) is defined as:
@@ -79,73 +94,78 @@ The entire API is cleanly documented using **Springdoc OpenAPI 3.1**, providing 
 
 ### 🛠️ Installation & Setup
 
-To get this project up and running on your local machine, follow these steps:
+To get this project up and running on your local machine, you have two options: using Docker (Recommended) or traditional local setup.
 
-#### Prerequisites
-*   **Java**: Version 25 (or compatible JDK)
-*   **Maven**: Latest stable version
-*   **Node.js & npm**: Latest stable version
-*   **PostgreSQL**: Database server
+#### 🐳 Option 1: Docker Compose (Recommended)
+The easiest way to start the entire environment (Database, Backend, and Frontend) without installing local dependencies.
+1. Ensure you have **Docker** and **Docker Compose** installed.
+2. Create a `.env` file in the root directory (next to `compose.yaml`) and define your database credentials:
+   ```env
+   DB_USERNAME=postgres
+   DB_PASSWORD=secretpassword
+   DB_NAME=taskintelligence_db
+   ```
+3. Run the following command in the root directory:
+   ```bash
+   docker compose up -d --build
+   ```
+   The API will be available at `http://localhost:8080` and the frontend at `http://localhost:4200`.
 
-#### Backend Setup
+#### 💻 Option 2: Local Setup
+**Prerequisites**
+* **Java**: Version 25 (or compatible JDK)
+* **Maven**: Latest stable version
+* **Node.js & npm**: Latest stable version
+* **PostgreSQL**: Database server running locally
+
+**Backend Setup**
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/TaskIntelligence.git
+    git clone [https://github.com/your-username/TaskIntelligence.git](https://github.com/your-username/TaskIntelligence.git)
     cd TaskIntelligence/backend
     ```
 2.  **Configure Database:**
-    *   Create a PostgreSQL database (e.g., `taskintelligence_db`).
-    *   Update `src/main/resources/application.yml` (or `application-dev.yml`) with your database credentials:
-        ```yaml
-        spring:
-          datasource:
-            url: jdbc:postgresql://localhost:5432/taskintelligence_db
-            username: your_db_username
-            password: your_db_password
-        ```
+    * Create a PostgreSQL database (e.g., `taskintelligence_db`).
+    * Update `src/main/resources/application.yml` (or `application-dev.yml`) with your specific credentials:
+      ```yaml
+      spring:
+        datasource:
+          url: jdbc:postgresql://localhost:5432/taskintelligence_db
+          username: your_db_username
+          password: your_db_password
+      ```
 3.  **Build and Run:**
     ```bash
     mvn clean install
     mvn spring-boot:run
     ```
-    The backend should start on `http://localhost:8080`.
 
-#### Frontend Setup (WIP)
+**Frontend Setup (WIP)**
 1.  **Navigate to the frontend directory:**
     ```bash
-    cd ../frontend # Assuming frontend is in a sibling directory
+    cd ../frontend
     ```
-2.  **Install dependencies:**
+2.  **Install dependencies & Run:**
     ```bash
     npm install
-    ```
-3.  **Run the application:**
-    ```bash
     ng serve
     ```
-    The frontend should be accessible on `http://localhost:4200` (default Angular port).
 
 #### Running Tests
-*   **Backend Tests:**
-    ```bash
-    mvn test
-    ```
-*   **Frontend Tests:**
-    ```bash
-    ng test
-    ```
+* **Backend:** `mvn test`
+* **Frontend:** `ng test`
 
 ### 🗺️ Roadmap
-*   **Frontend Development:** Complete the Angular 21 application integration with the backend API.
-*   **Advanced Analytics:** Implement more sophisticated user productivity statistics and visualizations.
-*   **Notifications:** Add real-time notifications for upcoming deadlines or overdue tasks.
-*   **User Customization:** Allow users to customize priority calculation parameters.
-*   **Mobile Application:** Develop native mobile applications for iOS and Android.
+* **Frontend Development:** Complete the Angular 21 application integration with the backend API.
+* **Advanced Analytics:** Implement more sophisticated user productivity statistics and visualizations.
+* **Notifications:** Add real-time notifications for upcoming deadlines or overdue tasks.
+* **User Customization:** Allow users to customize priority calculation parameters.
+* **Mobile Application:** Develop native mobile applications for iOS and Android.
 
 ### 📧 Contact
 For any questions or collaborations, feel free to reach out:
-*   **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
-*   **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
+* **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
+* **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
 
 ---
 
@@ -154,6 +174,7 @@ For any questions or collaborations, feel free to reach out:
 ### 📖 Spis Treści
 - [🚀 O Projekcie](#-o-projekcie)
 - [🏗️ Architektura i Główne Moduły](#️-architektura-i-główne-moduły)
+- [📂 Struktura Projektu](#-struktura-projektu)
 - [🧠 Algorytm Intelligence](#-algorytm-intelligence)
 - [🌐 Możliwości API](#-możliwości-api)
 - [🎨 Stan Frontendu](#-stan-frontendu)
@@ -166,12 +187,25 @@ For any questions or collaborations, feel free to reach out:
 
 ### 🏗️ Architektura i Główne Moduły
 Backend został rygorystycznie zaprojektowany z myślą o czystym kodzie i podziale odpowiedzialności (Separation of Concerns):
-- 🛡️ **Bezpieczeństwo (Auth):** Solidna autoryzacja (`JJWT 0.12`) wymuszająca politykę `STATELESS` powiązaną z `BCryptPasswordEncoder`, autorski `JwtFilter` oraz natywan kontrola dostępu typu RBAC.
+- 🛡️ **Bezpieczeństwo (Auth):** Solidna autoryzacja (`JJWT 0.12`) wymuszająca politykę `STATELESS` powiązaną z `BCryptPasswordEncoder`, autorski `JwtFilter` oraz natywna kontrola dostępu typu RBAC.
 - 🧠 **Silnik SmartTask:** Algorytmiczne serce systemu bezustannie oceniające pilność każdego wpisu.
 - ⏱️ **Harmonogram (Scheduler):** Zautomatyzowane procesy tła (`@Scheduled`), zoptymalizowane do pomijania ukończonych zadań (`COMPLETED`) już na etapie zapytania do bazy, drastycznie zwiększając wydajność i redukując obciążenie przy dużej skali.
 - 🧯 **Globalna Obsługa Błędów:** Scentralizowany kontroler przechwytujący i mapujący logikę wyjątków do jednorodnych odpowiedzi HTTP (`@ControllerAdvice`).
 - 💾 **Warstwa Danych:** Bezpieczny przepływ danych ze wzorcem `DTO` we współpracy z silnikiem ORM w technologii `Hibernate` oraz `PostgreSQL`.
 - ⚙️ **Infrastruktura i Narzędzia:** Zautomatyzowane migracje schematów bazy danych oraz wgrywanie danych autorskich (dummy data) przez **Flyway**, elastyczne mapowanie DTO z **MapStruct** i czysty kod dzięki bibliotece **Lombok**, wspierane odpowiednimi profilami wdrożeniowymi (dev/prod).
+
+### 📂 Struktura Projektu
+```text
+TaskIntelligence/
+├── backend/                  # API napisane w Spring Boot 4.0.3
+│   ├── src/main/java/...     # Kod źródłowy (kontrolery, serwisy, encje)
+│   ├── src/main/resources/   # Konfiguracja oraz migracje Flyway
+│   └── Dockerfile            # Obraz kontenera dla backendu
+├── frontend/                 # Aplikacja w Angular 21 (WIP)
+│   ├── src/                  # Komponenty widoku
+│   └── Dockerfile            # Obraz kontenera dla frontendu
+└── compose.yaml              # Orkiestracja całości (Baza, API, Frontend)
+```
 
 ### 🧠 Algorytm Intelligence
 Logika `TaskPriorityService` eliminuje zgadywanie, kalkulując nieustannie Wskaźnik Pilności ($S$) ze wzoru:
@@ -209,73 +243,78 @@ Całość architektury jest dostępna i interaktywna dla programistów dzięki w
 
 ### 🛠️ Instalacja i Uruchomienie
 
-Aby uruchomić ten projekt na swojej lokalnej maszynie, wykonaj następujące kroki:
+Masz do wyboru dwie ścieżki uruchomienia: szybką przez środowisko Docker (Zalecane) lub manualną konfigurację lokalną.
 
-#### Wymagania wstępne
-*   **Java**: Wersja 25 (lub kompatybilny JDK)
-*   **Maven**: Najnowsza stabilna wersja
-*   **Node.js & npm**: Najnowsza stabilna wersja
-*   **PostgreSQL**: Serwer bazy danych
+#### 🐳 Opcja 1: Docker Compose (Zalecane)
+Najszybsza opcja niewymagająca instalowania Javy czy bazy danych na własnym systemie.
+1. Upewnij się, że masz zainstalowanego **Dockera** oraz **Docker Compose**.
+2. Utwórz plik `.env` w głównym katalogu projektu (obok pliku `compose.yaml`) i wprowadź swoje dane do bazy:
+   ```env
+   DB_USERNAME=postgres
+   DB_PASSWORD=secretpassword
+   DB_NAME=taskintelligence_db
+   ```
+3. W głównym folderze projektu odpal komendę:
+   ```bash
+   docker compose up -d --build
+   ```
+   PostgreSQL, Spring Boot (port 8080) i Angular (port 4200) wstaną automatycznie.
 
-#### Konfiguracja Backendu
+#### 💻 Opcja 2: Instalacja Lokalna
+**Wymagania wstępne**
+* **Java**: Wersja 25 (lub kompatybilny JDK)
+* **Maven**: Najnowsza stabilna wersja
+* **Node.js & npm**: Najnowsza stabilna wersja
+* **PostgreSQL**: Serwer bazy danych uruchomiony lokalnie
+
+**Konfiguracja Backendu**
 1.  **Sklonuj repozytorium:**
     ```bash
-    git clone https://github.com/your-username/TaskIntelligence.git
+    git clone [https://github.com/your-username/TaskIntelligence.git](https://github.com/your-username/TaskIntelligence.git)
     cd TaskIntelligence/backend
     ```
 2.  **Skonfiguruj Bazę Danych:**
-    *   Utwórz bazę danych PostgreSQL (np. `taskintelligence_db`).
-    *   Zaktualizuj `src/main/resources/application.yml` (lub `application-dev.yml`) swoimi danymi dostępowymi do bazy:
-        ```yaml
-        spring:
-          datasource:
-            url: jdbc:postgresql://localhost:5432/taskintelligence_db
-            username: your_db_username
-            password: your_db_password
-        ```
+    * Utwórz bazę danych PostgreSQL (np. `taskintelligence_db`).
+    * Zaktualizuj plik `src/main/resources/application.yml` (lub `application-dev.yml`) swoimi danymi:
+      ```yaml
+      spring:
+        datasource:
+          url: jdbc:postgresql://localhost:5432/taskintelligence_db
+          username: your_db_username
+          password: your_db_password
+      ```
 3.  **Zbuduj i Uruchom:**
     ```bash
     mvn clean install
     mvn spring-boot:run
     ```
-    Backend powinien uruchomić się na `http://localhost:8080`.
 
-#### Konfiguracja Frontendu (WIP)
+**Konfiguracja Frontendu (WIP)**
 1.  **Przejdź do katalogu frontendu:**
     ```bash
-    cd ../frontend # Zakładając, że frontend jest w katalogu równorzędnym
+    cd ../frontend
     ```
-2.  **Zainstaluj zależności:**
+2.  **Zainstaluj zależności i uruchom:**
     ```bash
     npm install
-    ```
-3.  **Uruchom aplikację:**
-    ```bash
     ng serve
     ```
-    Frontend powinien być dostępny pod adresem `http://localhost:4200` (domyślny port Angulara).
 
 #### Uruchamianie Testów
-*   **Testy Backendu:**
-    ```bash
-    mvn test
-    ```
-*   **Testy Frontendu:**
-    ```bash
-    ng test
-    ```
+* **Testy Backendu:** `mvn test`
+* **Testy Frontendu:** `ng test`
 
 ### 🗺️ Plan Rozwoju
-*   **Rozwój Frontendu:** Ukończenie integracji aplikacji Angular 21 z API backendu.
-*   **Zaawansowana Analityka:** Wdrożenie bardziej zaawansowanych statystyk produktywności użytkownika i wizualizacji.
-*   **Powiadomienia:** Dodanie powiadomień w czasie rzeczywistym o nadchodzących terminach lub zaległych zadaniach.
-*   **Personalizacja Użytkownika:** Umożliwienie użytkownikom dostosowywania parametrów obliczania priorytetów.
-*   **Aplikacja Mobilna:** Opracowanie natywnych aplikacji mobilnych dla systemów iOS i Android.
+* **Rozwój Frontendu:** Ukończenie integracji aplikacji Angular 21 z API backendu.
+* **Zaawansowana Analityka:** Wdrożenie bardziej zaawansowanych statystyk produktywności użytkownika i wizualizacji.
+* **Powiadomienia:** Dodanie powiadomień w czasie rzeczywistym o nadchodzących terminach lub zaległych zadaniach.
+* **Personalizacja Użytkownika:** Umożliwienie użytkownikom dostosowywania parametrów obliczania priorytetów.
+* **Aplikacja Mobilna:** Opracowanie natywnych aplikacji mobilnych dla systemów iOS i Android.
 
 ### 📧 Kontakt
 W przypadku pytań lub chęci współpracy, skontaktuj się:
-*   **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
-*   **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
+* **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
+* **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
 
 ---
 
@@ -288,6 +327,7 @@ W przypadku pytań lub chęci współpracy, skontaktuj się:
 | **Frontend Core** | Angular 21.2.2 (WIP), Tailwind CSS |
 | **Security** | Spring Security + JJWT 0.12 (Stateless JWT) |
 | **API Docs** | Springdoc OpenAPI 3.1 (Swagger UI) |
+| **Deployment** | Docker, Docker Compose |
 
 ---
 
