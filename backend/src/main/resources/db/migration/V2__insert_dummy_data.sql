@@ -6,7 +6,7 @@ VALUES (
            'Główny',
            'Tester',
            'Poland',
-           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+           '$2a$10$o89sUIuSQfm9RhA7ZJMH1.r2/roOmHzVJ1rbFH88WQC59eTsquz2G',
            'USER'
        ) ON CONFLICT (username) DO NOTHING;
 
