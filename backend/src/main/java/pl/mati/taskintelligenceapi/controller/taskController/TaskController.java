@@ -121,6 +121,7 @@ public class TaskController {
             @ApiResponse(responseCode = "404", description = "Task not found"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @Operation(summary = "Update task status", description = "Updates the status of an existing task for the authenticated user.")
     @PatchMapping("/{requestedId}/updateStatus")
     public ResponseEntity<RestResponse<TaskResponseDTO>> updateTaskStatus(@PathVariable Long requestedId, @Valid @RequestBody StatusUpdateDto status, Principal principal){
         TaskResponseDTO updatedTask = taskService.patchTaskStatus(requestedId, status, principal.getName());

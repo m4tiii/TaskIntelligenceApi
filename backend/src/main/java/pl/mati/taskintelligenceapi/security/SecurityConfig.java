@@ -72,6 +72,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/ws-intelligence/**").permitAll() // Allow WebSocket endpoint without authentication
                 .anyRequest().authenticated()
         );
 
