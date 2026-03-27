@@ -1,8 +1,6 @@
 package pl.mati.taskintelligenceapi.controller.taskController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +27,7 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT"),
-            @ApiResponse(responseCode = "404", description = "Task not found")
-    })
+
     @Operation(summary = "Get task by ID", description = "Retrieves a specific task by its ID and authenticated user.")
     @GetMapping("/{requestedId}")
     public ResponseEntity<RestResponse<TaskResponseDTO>> getTaskById(@PathVariable Long requestedId, Principal principal) {
@@ -41,10 +35,7 @@ public class TaskController {
         return ResponseEntity.ok(RestResponse.success(taskResponseDTO));
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT")
-    })
+
     @Operation(summary = "Get all tasks", description = "Retrieves all tasks for the authenticated user.")
     @GetMapping
     public ResponseEntity<RestResponse<List<TaskResponseDTO>>> getAllTasks(Principal principal){
@@ -52,10 +43,7 @@ public class TaskController {
         return ResponseEntity.ok(RestResponse.success(tasks));
     }
 
-    @ApiResponses(value ={
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT")
-    })
+
     @Operation(summary = "Get page of tasks", description = "Retrieves a page of tasks for the authenticated user.")
     @GetMapping("/page")
     public ResponseEntity<RestResponse<Page<TaskResponseDTO>>> getPageOfTasks(Pageable pageable, Principal principal){
@@ -63,11 +51,7 @@ public class TaskController {
         return ResponseEntity.ok(RestResponse.success(taskPage));
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT"),
-            @ApiResponse(responseCode = "400", description = "Validation error")
-    })
+
     @Operation(summary = "Save task", description = "Saves a new task for the authenticated user.")
     @PostMapping
     public ResponseEntity<RestResponse<TaskResponseDTO>> saveTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO,
@@ -84,14 +68,6 @@ public class TaskController {
         return ResponseEntity.created(location).body(RestResponse.success(savedTask));
     }
 
-
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully updated"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT"),
-            @ApiResponse(responseCode = "404", description = "Task not found"),
-            @ApiResponse(responseCode = "400", description = "Validation error")
-    })
     @Operation(summary = "Update task", description = "Updates an existing task for the authenticated user.")
     @PutMapping("/{requestedId}")
     public ResponseEntity<RestResponse<TaskResponseDTO>> updateTask(@PathVariable Long requestedId,
@@ -103,11 +79,6 @@ public class TaskController {
     }
 
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Successfully deleted"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT"),
-            @ApiResponse(responseCode = "404", description = "Task not found")
-    })
     @Operation(summary = "Delete task", description = "Deletes an existing task for the authenticated user.")
     @DeleteMapping("/{requestedId}")
     public ResponseEntity<RestResponse<Void>> deleteTask(@PathVariable Long requestedId, Principal principal){
@@ -115,12 +86,7 @@ public class TaskController {
         return ResponseEntity.ok(RestResponse.success(null));
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully updated"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT"),
-            @ApiResponse(responseCode = "404", description = "Task not found"),
-            @ApiResponse(responseCode = "400", description = "Validation error")
-    })
+
     @Operation(summary = "Update task status", description = "Updates the status of an existing task for the authenticated user.")
     @PatchMapping("/{requestedId}/updateStatus")
     public ResponseEntity<RestResponse<TaskResponseDTO>> updateTaskStatus(@PathVariable Long requestedId, @Valid @RequestBody StatusUpdateDto status, Principal principal){

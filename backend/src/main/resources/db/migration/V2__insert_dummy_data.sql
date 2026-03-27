@@ -16,7 +16,7 @@ SELECT
     'Masowe Zadanie Testowe ' || i,
     'Zadanie wygenerowane na poczet testów wydajnościowych API dla użytkownika. Numer zadania: ' || i,
     TIMESTAMP '2026-03-01 00:00:00' + random() * (TIMESTAMP '2026-03-25 23:59:59' - TIMESTAMP '2026-03-01 00:00:00'),
-    TIMESTAMP '2026-05-01 00:00:00' + random() * (TIMESTAMP '2026-05-30 23:59:59' - TIMESTAMP '2026-05-01 00:00:00'),
+    TIMESTAMP '2026-03-01 00:00:00' + random() * (TIMESTAMP '2026-03-30 23:59:59' - TIMESTAMP '2026-03-01 00:00:00'),
     floor(random() * 10 + 1)::INT,
     CASE 
         WHEN random() < 0.50 THEN 'COMPLETED' 

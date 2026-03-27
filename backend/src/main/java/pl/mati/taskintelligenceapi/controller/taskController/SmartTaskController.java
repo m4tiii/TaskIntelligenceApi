@@ -1,8 +1,6 @@
 package pl.mati.taskintelligenceapi.controller.taskController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,12 +24,6 @@ public class SmartTaskController {
 
     private final SmartTaskService smartTaskService;
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - invalid or missing JWT"),
-            @ApiResponse(responseCode = "404", description = "Task not found"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized - invalid or missing JWT")
-    })
     @Operation(summary = "Get all smart tasks", description = "Retrieves all smart tasks for the authenticated user.")
     @GetMapping("/getAllSmartTasks")
     public ResponseEntity<RestResponse<Page<TaskResponseDTO>>> getAllSmartTasks(Principal principal, Pageable pageable){
@@ -39,6 +31,7 @@ public class SmartTaskController {
         return ResponseEntity.ok(RestResponse.success(taskPage));
     }
 
+    @Operation(summary = "Get smart task suggestions", description = "Retrieves smart task suggestions for the authenticated user.")
     @GetMapping("/suggestions")
     public ResponseEntity<RestResponse<List<TaskResponseDTO>>> getSuggestions(Principal principal){
         List<TaskResponseDTO> suggestions = smartTaskService.getSuggestions(principal);

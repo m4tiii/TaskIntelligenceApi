@@ -11,9 +11,22 @@ spring:
 
   jpa:
     show-sql: false
+    properties:
+      hibernate:
+        jdbc.hibernate.jdbc.batch_size: 50
+        order_updates: true
 
   threads:
     virtual:
       enabled: true
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+
 jwt:
   secret: moj-super-tajny-klucz-minimum-32-znaki
+

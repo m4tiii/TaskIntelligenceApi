@@ -2,13 +2,12 @@ package pl.mati.taskintelligenceapi.service.notificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import pl.mati.taskintelligenceapi.config.RabbiMQConfig;
 import pl.mati.taskintelligenceapi.dto.NotificationDTO;
-import pl.mati.taskintelligenceapi.entity.Notification;
 import pl.mati.taskintelligenceapi.entity.User;
-import pl.mati.taskintelligenceapi.repository.NotificationRepository;
+
 
 import java.time.LocalDateTime;
 
@@ -16,40 +15,31 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class NotificationDispatcher {
-    private final SimpMessagingTemplate messagingTemplate;
-    private final SimpUserRegistry userRegistry;
-    private final NotificationRepository notificationRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     public void dispatch(User user, String message, Long taskId){
-        boolean isUserOnline = userRegistry.getUser(user.getUsername()) != null;
-        if(isUserOnline){
-            log.info("Sending notification LIVE to user: {}", user.getUsername());
 
-            NotificationDTO notificationPayload = new NotificationDTO(
-                    null,
-                    "OVERDUE_ALERT",
-                    message,
-                    taskId,
-                    LocalDateTime.now()
-            );
+        log.info("Sending notification LIVE to user: {}", user.getUsername());
 
-            messagingTemplate.convertAndSendToUser(
-                    user.getUsername(),
-                    "/queue/notifications",
-                    notificationPayload
-            );
-        }else{
-            log.info("User {} is offline. Saving notification to database", user.getUsername());
+        NotificationDTO notificationPayload = new NotificationDTO(
+                null,
+                "OVERDUE_ALERT",
+                message,
+                taskId,
+                LocalDateTime.now()
+        );
 
-            Notification notification = Notification.builder()
-                    .user(user)
-                    .message(message)
-                    .type("OVERDUE_ALERT")
-                    .taskId(taskId)
-                    .build();
+        rabbitTemplate.convertAndSend(
+                RabbiMQConfig.NOTIFICATION_EXCHANGE,
+                RabbiMQConfig.NOTIFICATION_ROUTING_KEY,
+                notificationPayload,
+                m -> {
+                    m.getMessageProperties().setHeader("targerUser", user.getUsername());
+                    return m;
+                }
+        );
 
-            notificationRepository.save(notification);
-        }
+
     }
 
     public void sendOverdueAlert(User user, Long taskId, String taskTitle){

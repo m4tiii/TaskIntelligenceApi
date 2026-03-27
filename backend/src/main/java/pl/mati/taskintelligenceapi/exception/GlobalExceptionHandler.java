@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pl.mati.taskintelligenceapi.dto.RestResponse;
 
@@ -18,6 +19,7 @@ import pl.mati.taskintelligenceapi.dto.RestResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ApiResponse(
             responseCode = "404",
             description = "Entity not found",
@@ -31,6 +33,8 @@ public class GlobalExceptionHandler {
                 .body(RestResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
 
     }
+
+
     @ApiResponse(
             responseCode = "400",
             description = "Validation error",
@@ -49,6 +53,7 @@ public class GlobalExceptionHandler {
                .body(RestResponse.error(HttpStatus.BAD_REQUEST.value(), errorMessage));
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ApiResponse(
             responseCode = "500",
             description = "Internal server error",
@@ -62,6 +67,7 @@ public class GlobalExceptionHandler {
                 .body(RestResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error"));
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ApiResponse(
             responseCode = "403",
             description = "Access denied",
