@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.mati.taskintelligenceapi.dto.NotificationDTO;
 import pl.mati.taskintelligenceapi.entity.Notification;
 import pl.mati.taskintelligenceapi.entity.User;
@@ -21,10 +20,7 @@ public class NotificationDispatcher {
     private final SimpUserRegistry userRegistry;
     private final NotificationRepository notificationRepository;
 
-    @Transactional
-    public void sendOverdueAlert(User user, Long taskId, String taskTitle){
-        String message = "Your task: `" + taskTitle + "' is after deadline!";
-
+    public void dispatch(User user, String message, Long taskId){
         boolean isUserOnline = userRegistry.getUser(user.getUsername()) != null;
         if(isUserOnline){
             log.info("Sending notification LIVE to user: {}", user.getUsername());
@@ -56,38 +52,11 @@ public class NotificationDispatcher {
         }
     }
 
-    @Transactional
+    public void sendOverdueAlert(User user, Long taskId, String taskTitle){
+        dispatch(user, "Your task: `" + taskTitle + "' is after deadline!", taskId);
+    }
+
     public void sendCloseToOverdueAlert(User user, Long taskId, String taskTitle){
-        String message = "Your task: `" + taskTitle + "' is close to deadline!";
-
-        boolean isUserOnline = userRegistry.getUser(user.getUsername()) != null;
-        if(isUserOnline) {
-            log.info("Sending notification LIVE to user: {}", user.getUsername());
-
-            NotificationDTO notificationPayload = new NotificationDTO(
-                    null,
-                    "CLOSE_TO_OVERDUE_ALERT",
-                    message,
-                    taskId,
-                    LocalDateTime.now()
-            );
-
-            messagingTemplate.convertAndSendToUser(
-                    user.getUsername(),
-                    "/queue/notifications",
-                    notificationPayload
-            );
-        }else{
-            log.info("User {} is offline. Saving notification to database", user.getUsername());
-
-            Notification notification = Notification.builder()
-                    .user(user)
-                    .message(message)
-                    .type("CLOSE_TO_OVERDUE_ALERT")
-                    .taskId(taskId)
-                    .build();
-
-            notificationRepository.save(notification);
-        }
+        dispatch(user, "Your task: `" + taskTitle + "' is close to deadline!", taskId);
     }
 }
