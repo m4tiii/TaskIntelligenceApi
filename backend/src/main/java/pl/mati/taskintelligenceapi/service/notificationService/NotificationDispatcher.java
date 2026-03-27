@@ -49,7 +49,7 @@ public class NotificationDispatcher {
                     .user(user)
                     .message(message)
                     .type("OVERDUE_ALERT")
-                    .task_id(taskId)
+                    .taskId(taskId)
                     .build();
 
             notificationRepository.save(notification);
@@ -84,7 +84,7 @@ public class NotificationDispatcher {
                     .user(user)
                     .message(message)
                     .type("CLOSE_TO_OVERDUE_ALERT")
-                    .task_id(taskId)
+                    .taskId(taskId)
                     .build();
 
             notificationRepository.save(notification);

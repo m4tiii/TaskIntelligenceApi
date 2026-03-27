@@ -30,7 +30,7 @@ public class Notification {
     @NotNull
     private String type;
     @NotNull
-    private Long task_id;
+    private Long taskId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
