@@ -2,6 +2,7 @@ package pl.mati.taskintelligenceapi.controller.notificationController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class NotificationController {
 
     @Operation(summary = "Mark notification as read", description = "Marks a notification as read.")
     @PatchMapping("/markAsRead/{notificationId}")
-    public ResponseEntity<RestResponse<Void>> markAsRead(@PathVariable Long notificationId, Principal principal) {
+    public ResponseEntity<RestResponse<Void>> markAsRead(@PathVariable @Valid Long notificationId, Principal principal) {
         notificationService.markAsRead(notificationId, principal);
         return ResponseEntity.ok(RestResponse.success(null));
     }

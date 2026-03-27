@@ -2,6 +2,7 @@ package pl.mati.taskintelligenceapi.controller.statisticsController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class StatisticsController {
 
     @Operation(summary = "Get statistics", description = "Retrieves statistics for the authenticated user.")
     @PostMapping
-    public ResponseEntity<RestResponse<List<StatisticsResponseDTO>>> getStats(@RequestBody StatsRequestDTO statsRequestDTO, Principal principal){
+    public ResponseEntity<RestResponse<List<StatisticsResponseDTO>>> getStats(@RequestBody @Valid StatsRequestDTO statsRequestDTO, Principal principal) {
         List<StatisticsResponseDTO> statisticsResponseDTOList = statisticsService.getStats(statsRequestDTO, principal.getName());
         return ResponseEntity.ok(RestResponse.success(statisticsResponseDTOList));
     }

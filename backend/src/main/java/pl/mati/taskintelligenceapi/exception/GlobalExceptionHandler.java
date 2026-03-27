@@ -8,11 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import pl.mati.taskintelligenceapi.dto.RestResponse;
 
 @Slf4j
@@ -79,5 +81,31 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(RestResponse.error(HttpStatus.FORBIDDEN.value(), ex.getMessage()));
+    }
+
+    @ApiResponse(
+            responseCode = "400",
+            description = "Type mismatch error",
+            content = @Content(schema = @Schema(implementation = RestResponse.class))
+    )
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<RestResponse<Void>> handleTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        log.warn("Type mismatch error: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(RestResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
+    }
+
+    @ApiResponse(
+            responseCode = "400",
+            description = "Http message not readable error",
+            content = @Content(schema = @Schema(implementation = RestResponse.class))
+    )
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<RestResponse<Void>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        log.warn("Http message not readable error: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(RestResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
     }
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +28,14 @@ public class AuthController {
 
     @Operation(summary = "Register user", description = "Registers a new user.",  security = {})
     @PostMapping("/register")
-    public ResponseEntity<RestResponse<?>> registerUser(@RequestBody AuthRegisterRequestDTO authRequestDTO){
+    public ResponseEntity<RestResponse<?>> registerUser(@RequestBody @Valid AuthRegisterRequestDTO authRequestDTO) {
         AuthResponseDTO authResponseDTO = authService.registerUser(authRequestDTO);
         return ResponseEntity.ok(RestResponse.success(authResponseDTO));
     }
 
     @Operation(summary = "Login user", description = "Logs in an existing user.", security = {})
     @PostMapping("/login")
-    public ResponseEntity<RestResponse<AuthResponseDTO>> login(@RequestBody AuthRequestDTO authRequestDTO){
+    public ResponseEntity<RestResponse<AuthResponseDTO>> login(@RequestBody @Valid AuthRequestDTO authRequestDTO) {
         AuthResponseDTO authResponseDTO = authService.login(authRequestDTO);
         return ResponseEntity.ok(RestResponse.success(authResponseDTO));
     }
@@ -53,7 +54,7 @@ public class AuthController {
 
     @Operation(summary = "Refresh token", description = "Refreshes the access token.")
     @PostMapping("/refresh")
-    public ResponseEntity<RestResponse<AuthResponseDTO>> refresh(@RequestBody RefreshTokenRequestDTO refreshToken){
+    public ResponseEntity<RestResponse<AuthResponseDTO>> refresh(@RequestBody @Valid RefreshTokenRequestDTO refreshToken) {
 
         AuthResponseDTO authResponseDTO = authService.refresh(refreshToken);
         return ResponseEntity.ok(RestResponse.success(authResponseDTO));

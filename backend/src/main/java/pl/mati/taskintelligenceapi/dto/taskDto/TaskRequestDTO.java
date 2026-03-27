@@ -17,7 +17,8 @@ public record TaskRequestDTO(
         @NotNull
         LocalDateTime deadline,
         @Max(10) @Min(1)
-        int importance,
+        @NotNull
+        Integer importance,
         TaskStatus taskStatus
 ) {
 }
