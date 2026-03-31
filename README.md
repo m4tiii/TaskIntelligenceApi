@@ -38,14 +38,14 @@
 ### 🏗️ Architecture & Core Modules
 The backend follows Domain-Driven Design principles with clean separation of concerns:
 - 🛡️ **Security (Auth):** Robust, strict `STATELESS` JWT authentication (`JJWT 0.12`) with `BCryptPasswordEncoder`, custom `JwtFilter`, and native Role-Based Access Control protecting endpoints.
+- 🚀 **High-Performance Concurrency:** Leveraging Java Virtual Threads (`spring.threads.virtual.enabled`) for massive throughput and optimized resource utilization.
 - 🧠 **SmartTask Engine:** The algorithmic core that continuously calculates and categorizes the urgency of every task.
-- ⏱️ **Task Scheduler:** Background services (`@Scheduled`) recalculating scores system-wide every hour, featuring database-level filtering of `COMPLETED` tasks to ensure horizontal scalability without N+1 overhead.
+- ⏱️ **Task Scheduler & Real-Time Messaging:** Background services (`@Scheduled`) recalculating scores system-wide, integrated with **RabbitMQ** for reliable message brokering. The system features fully secured **WebSocket (STOMP)** channels, pushing live notifications (e.g., Overdue Alerts) directly to clients. Connection security is strictly enforced by a custom `ChannelInterceptor` that validates JWT tokens during the initial STOMP handshake.
 - 🧯 **Global Exception Handling:** Unified API error responses (`@ControllerAdvice`) across all controllers mapping exceptions to standardized HTTP codes.
 - 💾 **Data Layer:** Clean `DTO` pattern matching with internal Entities, driving seamless interactions with `Hibernate` and `PostgreSQL`.
 - ⚙️ **Infrastructure & Tooling:** Automated database migrations and mock data seeding via **Flyway**, boilerplate reduction and DTO mapping using **MapStruct** & **Lombok**, with environment-specific profiles (dev/prod).
 
 ### 📂 Project Structure
-```text
 TaskIntelligence/
 ├── backend/                  # Spring Boot 4.0.3 API
 │   ├── src/main/java/...     # Core Java source code
@@ -55,7 +55,6 @@ TaskIntelligence/
 │   ├── src/                  # Components, services, and styles
 │   └── Dockerfile            # Frontend container configuration
 └── compose.yaml              # Multi-container orchestration (DB, API, Web)
-```
 
 ### 🧠 The Intelligence Algorithm
 The system replaces guesswork with a precise mathematical model implemented in `TaskPriorityService`. The Urgency Score ($S$) is defined as:
@@ -97,19 +96,18 @@ The entire API is cleanly documented using **Springdoc OpenAPI 3.1**, providing 
 To get this project up and running on your local machine, you have two options: using Docker (Recommended) or traditional local setup.
 
 #### 🐳 Option 1: Docker Compose (Recommended)
-The easiest way to start the entire environment (Database, Backend, and Frontend) without installing local dependencies.
+The easiest way to start the entire environment (Database, Backend, Frontend, and Message Broker) without installing local dependencies.
 1. Ensure you have **Docker** and **Docker Compose** installed.
-2. Create a `.env` file in the root directory (next to `compose.yaml`) and define your database credentials:
-   ```env
-   DB_USERNAME=postgres
-   DB_PASSWORD=secretpassword
-   DB_NAME=taskintelligence_db
-   ```
+2. Create a `.env` file in the root directory (next to `compose.yaml`) and define your environment variables matching the compose file:
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=secretpassword
+   POSTGRES_DB=taskintelligence_db
+   JWT_SECRET=your-super-secret-jwt-key-min-32-chars
+   
 3. Run the following command in the root directory:
-   ```bash
    docker compose up -d --build
-   ```
-   The API will be available at `http://localhost:8080` and the frontend at `http://localhost:4200`.
+   
+   The API will be available at `http://localhost:8080`, the frontend at `http://localhost:4200`, and the RabbitMQ Management UI at `http://localhost:15672` (credentials: guest / guest).
 
 #### 💻 Option 2: Local Setup
 **Prerequisites**
@@ -120,36 +118,31 @@ The easiest way to start the entire environment (Database, Backend, and Frontend
 
 **Backend Setup**
 1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/TaskIntelligence.git](https://github.com/your-username/TaskIntelligence.git)
+    git clone https://github.com/your-username/TaskIntelligence.git
     cd TaskIntelligence/backend
-    ```
+    
 2.  **Configure Database:**
     * Create a PostgreSQL database (e.g., `taskintelligence_db`).
     * Update `src/main/resources/application.yml` (or `application-dev.yml`) with your specific credentials:
-      ```yaml
       spring:
         datasource:
           url: jdbc:postgresql://localhost:5432/taskintelligence_db
           username: your_db_username
           password: your_db_password
-      ```
+      
 3.  **Build and Run:**
-    ```bash
     mvn clean install
     mvn spring-boot:run
-    ```
+    
 
 **Frontend Setup (WIP)**
 1.  **Navigate to the frontend directory:**
-    ```bash
     cd ../frontend
-    ```
+    
 2.  **Install dependencies & Run:**
-    ```bash
     npm install
     ng serve
-    ```
+    
 
 #### Running Tests
 * **Backend:** `mvn test`
@@ -164,8 +157,8 @@ The easiest way to start the entire environment (Database, Backend, and Frontend
 
 ### 📧 Contact
 For any questions or collaborations, feel free to reach out:
-* **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
-* **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
+* **Email**: mateusz.rokitowski2004@gmail.com
+* **GitHub**: github.com/m4tiii
 
 ---
 
@@ -188,14 +181,14 @@ For any questions or collaborations, feel free to reach out:
 ### 🏗️ Architektura i Główne Moduły
 Backend został rygorystycznie zaprojektowany z myślą o czystym kodzie i podziale odpowiedzialności (Separation of Concerns):
 - 🛡️ **Bezpieczeństwo (Auth):** Solidna autoryzacja (`JJWT 0.12`) wymuszająca politykę `STATELESS` powiązaną z `BCryptPasswordEncoder`, autorski `JwtFilter` oraz natywna kontrola dostępu typu RBAC.
+- 🚀 **Wysoka Wydajność:** Zastosowanie Wirtualnych Wątków (Virtual Threads) dla maksymalizacji przepustowości zapytań i optymalizacji zużycia zasobów.
 - 🧠 **Silnik SmartTask:** Algorytmiczne serce systemu bezustannie oceniające pilność każdego wpisu.
-- ⏱️ **Harmonogram (Scheduler):** Zautomatyzowane procesy tła (`@Scheduled`), zoptymalizowane do pomijania ukończonych zadań (`COMPLETED`) już na etapie zapytania do bazy, drastycznie zwiększając wydajność i redukując obciążenie przy dużej skali.
+- ⏱️ **Harmonogram i Komunikacja Real-Time:** Zautomatyzowane procesy tła (`@Scheduled`) wspierane przez brokera **RabbitMQ**. System wykorzystuje w pełni zabezpieczone kanały **WebSocket (STOMP)** do wypychania powiadomień na żywo (np. o przekroczonych terminach). Bezpieczeństwo połączeń jest gwarantowane przez dedykowany `ChannelInterceptor`, który autoryzuje tokeny JWT bezpośrednio w fazie nawiązywania połączenia.
 - 🧯 **Globalna Obsługa Błędów:** Scentralizowany kontroler przechwytujący i mapujący logikę wyjątków do jednorodnych odpowiedzi HTTP (`@ControllerAdvice`).
 - 💾 **Warstwa Danych:** Bezpieczny przepływ danych ze wzorcem `DTO` we współpracy z silnikiem ORM w technologii `Hibernate` oraz `PostgreSQL`.
-- ⚙️ **Infrastruktura i Narzędzia:** Zautomatyzowane migracje schematów bazy danych oraz wgrywanie danych autorskich (dummy data) przez **Flyway**, elastyczne mapowanie DTO z **MapStruct** i czysty kod dzięki bibliotece **Lombok**, wspierane odpowiednimi profilami wdrożeniowymi (dev/prod).
+- ⚙️ **Infrastruktura i Narzędzia:** Zautomatyzowane migracje schematów bazy danych oraz wgrywanie danych autorskich przez **Flyway**, elastyczne mapowanie DTO z **MapStruct** i czysty kod dzięki bibliotece **Lombok**.
 
 ### 📂 Struktura Projektu
-```text
 TaskIntelligence/
 ├── backend/                  # API napisane w Spring Boot 4.0.3
 │   ├── src/main/java/...     # Kod źródłowy (kontrolery, serwisy, encje)
@@ -205,7 +198,6 @@ TaskIntelligence/
 │   ├── src/                  # Komponenty widoku
 │   └── Dockerfile            # Obraz kontenera dla frontendu
 └── compose.yaml              # Orkiestracja całości (Baza, API, Frontend)
-```
 
 ### 🧠 Algorytm Intelligence
 Logika `TaskPriorityService` eliminuje zgadywanie, kalkulując nieustannie Wskaźnik Pilności ($S$) ze wzoru:
@@ -248,17 +240,16 @@ Masz do wyboru dwie ścieżki uruchomienia: szybką przez środowisko Docker (Za
 #### 🐳 Opcja 1: Docker Compose (Zalecane)
 Najszybsza opcja niewymagająca instalowania Javy czy bazy danych na własnym systemie.
 1. Upewnij się, że masz zainstalowanego **Dockera** oraz **Docker Compose**.
-2. Utwórz plik `.env` w głównym katalogu projektu (obok pliku `compose.yaml`) i wprowadź swoje dane do bazy:
-   ```env
-   DB_USERNAME=postgres
-   DB_PASSWORD=secretpassword
-   DB_NAME=taskintelligence_db
-   ```
+2. Utwórz plik `.env` w głównym katalogu projektu (obok pliku `compose.yaml`) i wprowadź poprawne zmienne środowiskowe:
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=secretpassword
+   POSTGRES_DB=taskintelligence_db
+   JWT_SECRET=twoj-super-tajny-klucz-jwt-min-32-znaki
+   
 3. W głównym folderze projektu odpal komendę:
-   ```bash
    docker compose up -d --build
-   ```
-   PostgreSQL, Spring Boot (port 8080) i Angular (port 4200) wstaną automatycznie.
+   
+   PostgreSQL, Spring Boot (port 8080), Angular (port 4200) oraz RabbitMQ (panel na porcie 15672, login: guest / guest) wstaną automatycznie.
 
 #### 💻 Opcja 2: Instalacja Lokalna
 **Wymagania wstępne**
@@ -269,36 +260,31 @@ Najszybsza opcja niewymagająca instalowania Javy czy bazy danych na własnym sy
 
 **Konfiguracja Backendu**
 1.  **Sklonuj repozytorium:**
-    ```bash
-    git clone [https://github.com/your-username/TaskIntelligence.git](https://github.com/your-username/TaskIntelligence.git)
+    git clone https://github.com/your-username/TaskIntelligence.git
     cd TaskIntelligence/backend
-    ```
+    
 2.  **Skonfiguruj Bazę Danych:**
     * Utwórz bazę danych PostgreSQL (np. `taskintelligence_db`).
     * Zaktualizuj plik `src/main/resources/application.yml` (lub `application-dev.yml`) swoimi danymi:
-      ```yaml
       spring:
         datasource:
           url: jdbc:postgresql://localhost:5432/taskintelligence_db
           username: your_db_username
           password: your_db_password
-      ```
+      
 3.  **Zbuduj i Uruchom:**
-    ```bash
     mvn clean install
     mvn spring-boot:run
-    ```
+    
 
 **Konfiguracja Frontendu (WIP)**
 1.  **Przejdź do katalogu frontendu:**
-    ```bash
     cd ../frontend
-    ```
+    
 2.  **Zainstaluj zależności i uruchom:**
-    ```bash
     npm install
     ng serve
-    ```
+    
 
 #### Uruchamianie Testów
 * **Testy Backendu:** `mvn test`
@@ -313,8 +299,8 @@ Najszybsza opcja niewymagająca instalowania Javy czy bazy danych na własnym sy
 
 ### 📧 Kontakt
 W przypadku pytań lub chęci współpracy, skontaktuj się:
-* **Email**: [mateusz.rokitowski2004@gmail.com](mailto:mateusz.rokitowski2004@gmail.com)
-* **GitHub**: [github.com/m4tiii](https://github.com/m4tiii)
+* **Email**: mateusz.rokitowski2004@gmail.com
+* **GitHub**: github.com/m4tiii
 
 ---
 
