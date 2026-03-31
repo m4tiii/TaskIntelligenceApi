@@ -3,11 +3,11 @@ package pl.mati.taskintelligenceapi.dto.statisticsDto;
 import jakarta.validation.constraints.NotNull;
 import pl.mati.taskintelligenceapi.entity.enums.TimeRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 public record StatsRequestDTO(
-        @NotNull LocalDate from,
-        @NotNull LocalDate to,
+        @NotNull OffsetDateTime from,
+        @NotNull OffsetDateTime to,
         @NotNull TimeRange timeRange
 ) {
 }

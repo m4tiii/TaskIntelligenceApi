@@ -6,6 +6,6 @@ CREATE TABLE notifications(
     is_read BOOLEAN DEFAULT FALSE,
     type VARCHAR(255) NOT NULL,
     task_id BIGINT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL,
     CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

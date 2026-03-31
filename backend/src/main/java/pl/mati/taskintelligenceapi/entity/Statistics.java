@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 
 @Entity
@@ -27,7 +27,7 @@ public class Statistics {
 
     @Column(nullable = false)
     @Schema(description = "Date of task's completion", example = "2026-03-22")
-    private LocalDate completionDate;
+    private OffsetDateTime completionDate;
 
     @Schema(description = "User associated with these statistics")
     @ManyToOne

@@ -11,7 +11,7 @@ import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.service.notificationService.NotificationDispatcher;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -36,9 +36,9 @@ public class TaskSchedulerService {
                 double newScore = taskPriorityService.calculatePriorityScore(task);
                 task.setPriorityScore(newScore);
 
-                if (LocalDateTime.now().isAfter(task.getDeadline())) {
+                if (OffsetDateTime.now().isAfter(task.getDeadline())) {
                     notificationDispatcher.sendOverdueAlert(task.getUser(), task.getId(), task.getTitle());
-                } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), task.getDeadline()) <= 2) {
+                } else if (ChronoUnit.HOURS.between(OffsetDateTime.now(), task.getDeadline()) <= 2) {
                     notificationDispatcher.sendCloseToOverdueAlert(task.getUser(), task.getId(), task.getTitle());
                 }
 
@@ -51,6 +51,6 @@ public class TaskSchedulerService {
             entityManager.clear();
             return null;
         });
-        log.info("Priorities updated! Done at: {}", LocalDateTime.now());
+        log.info("Priorities updated! Done at: {}", OffsetDateTime.now());
     }
 }

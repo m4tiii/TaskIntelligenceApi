@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.mati.taskintelligenceapi.entity.enums.Role;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class User {
     private String refreshToken;
 
     @Schema(description = "Expiration date of the refresh token", example = "2026-03-24 12:30")
-    private LocalDateTime refreshTokenExpiration;
+    private OffsetDateTime refreshTokenExpiration;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Statistics> statistics;

@@ -14,13 +14,13 @@ import pl.mati.taskintelligenceapi.dto.authDto.AuthRegisterRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthRequestDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.AuthResponseDTO;
 import pl.mati.taskintelligenceapi.dto.authDto.RefreshTokenRequestDTO;
-import pl.mati.taskintelligenceapi.entity.enums.Role;
 import pl.mati.taskintelligenceapi.entity.User;
+import pl.mati.taskintelligenceapi.entity.enums.Role;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 import pl.mati.taskintelligenceapi.security.JwtUtil;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Service
@@ -50,7 +50,7 @@ public class AuthService {
         String refresh = jwtUtil.generateRefreshToken(user.getUsername());
 
         user.setRefreshToken(refresh);
-        user.setRefreshTokenExpiration(LocalDateTime.now().plusDays(7));
+        user.setRefreshTokenExpiration(OffsetDateTime.now().plusDays(7));
         userRepository.save(user);
 
         return new AuthResponseDTO(access, refresh);
@@ -75,7 +75,7 @@ public class AuthService {
         if(
                 user.getRefreshToken() != null &&
                 user.getRefreshToken().equals(refreshToken.refreshToken()) &&
-                user.getRefreshTokenExpiration().isAfter(LocalDateTime.now())
+                        user.getRefreshTokenExpiration().isAfter(OffsetDateTime.now())
         ){
             return getAuthResponse(user);
         }

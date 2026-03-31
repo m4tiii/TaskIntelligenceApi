@@ -18,7 +18,7 @@ import pl.mati.taskintelligenceapi.repository.StatisticRepository;
 import pl.mati.taskintelligenceapi.repository.TaskRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -99,7 +99,7 @@ public class TaskService {
             Statistics statistics = new Statistics();
             statistics.setScore(taskPriorityService.calculateScoreOfCompletedTask(task));
             statistics.setUser(task.getUser());
-            statistics.setCompletionDate(LocalDate.now());
+            statistics.setCompletionDate(OffsetDateTime.now());
             statisticRepository.save(statistics);
         }
 

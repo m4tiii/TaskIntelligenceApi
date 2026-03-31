@@ -8,15 +8,16 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50),
     refresh_token VARCHAR(1000) UNIQUE,
-    refresh_token_expiration TIMESTAMP
+    refresh_token_expiration TIMESTAMPTZ
 );
 
 CREATE TABLE tasks (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     description VARCHAR(255),
-    created_at TIMESTAMP,
-    deadline TIMESTAMP NOT NULL,
+    created_at TIMESTAMPTZ,
+    start_at   TIMESTAMPTZ,
+    deadline   TIMESTAMPTZ NOT NULL,
     user_id BIGINT,
     importance INTEGER NOT NULL,
     task_status VARCHAR(50),
@@ -27,7 +28,7 @@ CREATE TABLE tasks (
 CREATE TABLE statistics (
     id BIGSERIAL PRIMARY KEY,
     score DOUBLE PRECISION NOT NULL,
-    completion_date DATE NOT NULL,
+    completion_date TIMESTAMPTZ NOT NULL,
     user_id BIGINT,
     CONSTRAINT fk_statistics_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );

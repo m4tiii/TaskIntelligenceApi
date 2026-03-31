@@ -13,7 +13,7 @@ import pl.mati.taskintelligenceapi.entity.User;
 import pl.mati.taskintelligenceapi.repository.StatisticRepository;
 import pl.mati.taskintelligenceapi.repository.UserRepository;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +35,6 @@ public class StatisticsService {
         User user =  userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-
-
         List<Statistics> stats = statisticRepository.findAllByUserAndCompletionDateBetween(user, dto.from(), dto.to());
 
 
@@ -54,9 +52,9 @@ public class StatisticsService {
                 .collect(Collectors.toList());
     }
 
-    private List<String> generateLabels(LocalDate from, LocalDate to, TimeRange timeRange){
+    private List<String> generateLabels(OffsetDateTime from, OffsetDateTime to, TimeRange timeRange) {
         List<String> labels = new ArrayList<>();
-        LocalDate current = alignToPeriodStart(from, timeRange);
+        OffsetDateTime current = alignToPeriodStart(from, timeRange);
 
         while (!current.isAfter(to)) {
             labels.add(formatByUnit(current, timeRange));
@@ -70,7 +68,7 @@ public class StatisticsService {
         return labels.stream().distinct().sorted().toList();
     }
 
-    private String formatByUnit(LocalDate date, TimeRange unit){
+    private String formatByUnit(OffsetDateTime date, TimeRange unit) {
         return switch (unit){
             case DAY -> date.toString();
             case WEEK -> {
@@ -82,7 +80,7 @@ public class StatisticsService {
         };
     }
 
-    private LocalDate alignToPeriodStart(LocalDate date, TimeRange timeRange){
+    private OffsetDateTime alignToPeriodStart(OffsetDateTime date, TimeRange timeRange) {
         return switch (timeRange){
             case WEEK -> {
                 int daysToSubtract = date.getDayOfWeek().getValue() - 1;

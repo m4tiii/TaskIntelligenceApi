@@ -56,7 +56,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
@@ -72,7 +72,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/ws-intelligence/**").permitAll() // Allow WebSocket endpoint without authentication
+                .requestMatchers("/ws-intelligence/**", "/actuator/**").permitAll() // Allow WebSocket endpoint without authentication
                 .anyRequest().authenticated()
         );
 

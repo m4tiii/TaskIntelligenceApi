@@ -18,7 +18,6 @@ public class SmartTaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
-    private final TaskPriorityService taskPriorityService;
 
     public Page<TaskResponseDTO> getSmartTaskList(String username, Pageable pageable){
 
@@ -34,6 +33,7 @@ public class SmartTaskService {
                     taskResponseDTO.title(),
                     taskResponseDTO.description(),
                     taskResponseDTO.createdAt(),
+                    taskResponseDTO.startAt(),
                     taskResponseDTO.deadline(),
                     taskResponseDTO.importance(),
                     taskResponseDTO.taskStatus(),

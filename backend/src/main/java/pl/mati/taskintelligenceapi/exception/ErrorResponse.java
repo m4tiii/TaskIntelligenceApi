@@ -1,10 +1,10 @@
 package pl.mati.taskintelligenceapi.exception;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record ErrorResponse(
         int status,
         String message,
-        LocalDateTime timestamp
+        OffsetDateTime timestamp
 ) {
 }

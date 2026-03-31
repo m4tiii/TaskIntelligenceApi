@@ -11,7 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import pl.mati.taskintelligenceapi.entity.enums.TaskStatus;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "tasks")
@@ -31,14 +31,18 @@ public class Task {
     @Schema(description = "Description of the task", example = "Milk from the fridge")
     private String description;
 
-    @Schema(description = "Date and time when the task was created", example = "2026-03-24 12:30")
+    @Schema(description = "Date and time when the task was created", example = "2026-03-24 12:30+01:00")
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
-    @Schema(description = "Date and time when the task is due", example = "2026-03-24 12:30:00")
+    @Schema(description = "Date and time when the task should start", example = "2026-03-24 12:30:00+01:00")
     @Column(nullable = false)
-    private LocalDateTime deadline;
+    private OffsetDateTime startAt;
+
+    @Schema(description = "Date and time when the task is due", example = "2026-03-24 12:30:00+01:00")
+    @Column(nullable = false)
+    private OffsetDateTime deadline;
 
     @Schema(description = "User who created the task")
     @ManyToOne

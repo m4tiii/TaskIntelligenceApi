@@ -9,7 +9,7 @@ import pl.mati.taskintelligenceapi.dto.NotificationDTO;
 import pl.mati.taskintelligenceapi.entity.User;
 
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Slf4j
 @Service
@@ -19,14 +19,12 @@ public class NotificationDispatcher {
 
     public void dispatch(User user, String message, Long taskId){
 
-        log.info("Sending notification LIVE to user: {}", user.getUsername());
-
         NotificationDTO notificationPayload = new NotificationDTO(
                 null,
                 "OVERDUE_ALERT",
                 message,
                 taskId,
-                LocalDateTime.now()
+                OffsetDateTime.now()
         );
 
         rabbitTemplate.convertAndSend(

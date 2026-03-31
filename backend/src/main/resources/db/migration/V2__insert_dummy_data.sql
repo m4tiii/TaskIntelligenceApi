@@ -12,26 +12,27 @@ VALUES (
 
 -- Generujemy równe 10 000 zadań przypisanych do Ciebie
 INSERT INTO tasks (title, description, created_at, deadline, importance, task_status, priority_score, user_id)
-SELECT 
+SELECT
     'Masowe Zadanie Testowe ' || i,
     'Zadanie wygenerowane na poczet testów wydajnościowych API dla użytkownika. Numer zadania: ' || i,
-    TIMESTAMP '2026-03-01 00:00:00' + random() * (TIMESTAMP '2026-03-25 23:59:59' - TIMESTAMP '2026-03-01 00:00:00'),
-    TIMESTAMP '2026-03-01 00:00:00' + random() * (TIMESTAMP '2026-03-30 23:59:59' - TIMESTAMP '2026-03-01 00:00:00'),
+    TIMESTAMPTZ '2026-03-01T00:00:00Z' +
+    random() * (TIMESTAMPTZ '2026-03-25T23:59:59Z' - TIMESTAMPTZ '2026-03-01T00:00:00Z'),
+    TIMESTAMPTZ '2026-03-01T00:00:00Z' +
+    random() * (TIMESTAMPTZ '2026-03-30T23:59:59Z' - TIMESTAMPTZ '2026-03-01T00:00:00Z'),
     floor(random() * 10 + 1)::INT,
-    CASE 
-        WHEN random() < 0.50 THEN 'COMPLETED' 
-        WHEN random() < 0.75 THEN 'NEW' 
-        ELSE 'IN_PROGRESS' 
-    END,
+    CASE
+        WHEN random() < 0.50 THEN 'COMPLETED'
+        WHEN random() < 0.75 THEN 'NEW'
+        ELSE 'IN_PROGRESS'
+        END,
     random() * 100,
     (SELECT id FROM users WHERE username = 'userTest')
 FROM generate_series(1, 10000) i;
 
 -- Generowanie wpisów do statystyk dla w/w 5000 zadań o statusie COMPLETED
 INSERT INTO statistics (score, completion_date, user_id)
-SELECT
-    priority_score, 
-    CURRENT_DATE - (floor(random() * 30)::INT),
+SELECT priority_score,
+       CURRENT_TIMESTAMP - (random() * interval '30 days'),
     user_id
 FROM tasks
 WHERE task_status = 'COMPLETED';
